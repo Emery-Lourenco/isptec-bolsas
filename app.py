@@ -1,42 +1,104 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
 
+# ==============================================================================
+# IMPORTAÇÃO DE MÓDULOS NECESSÁRIOS DO FLASK E SQLALCHEMY
+# ==============================================================================
+from flask import (
+    Flask,  # O motor central que cria a aplicação web
+    redirect,  # Função para redirecionar o utilizador para outra página
+    render_template,  # Função que carrega o ficheiro HTML e injeta dados lá dentro
+    request,  # Objeto que captura os dados enviados pelo formulário do browser
+    url_for,  # Cria URLs automáticas baseadas no nome das funções Python
+)
+from flask_sqlalchemy import (
+    SQLAlchemy,  # A ferramenta (ORM) que faz a ponte entre Python e o PostgreSQL
+)
+
+# ==============================================================================
+# INICIALIZAÇÃO DA APLICAÇÃO WEB
+# ==============================================================================
+# Cria a instância principal da aplicação Flask
 app = Flask(__name__)
 
-# CONFIGURAÇÃO DA BASE DE DADOS POSTGRESQL
-# Substitui 'postgres', 'tua_senha' e 'db_bolsas_isptec' pelos teus dados reais do PostgreSQL!
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:1234@localhost:5432/db_bolsas_isptec'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# ==============================================================================
+# CONFIGURAÇÃO DA BASE DE DADOS (POSTGRESQL)
+# ==============================================================================
+# Define o endereço do PostgreSQL usando o driver psycopg2
+# Formato: postgresql+psycopg2://UTILIZADOR:SENHA@SERVIDOR:PORTA/NOME_DA_BASE_DE_DADOS
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "postgresql+psycopg2://postgres:1234@localhost:5432/db_bolsas_isptec"
+)
 
+# Desativa alertas desnecessários de modificação de objetos para poupar memória RAM
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Liga a extensão SQLAlchemy à nossa aplicação Flask
 db = SQLAlchemy(app)
 
-# MODELO DA TABELA DE BOLSAS (Para testar a ligação)
+
+# ==============================================================================
+# MODELO RELACIONAL (TABELA NO POSTGRESQL REPRESENTADA EM CLASSE PYTHON)
+# ==============================================================================
 class Bolsa(db.Model):
-    __tablename__ = 'bolsas'
-    id = db.Column(db.Integer, primary_key=True)
-    titulo = db.Column(db.String(150), nullable=False)
-    descricao = db.Column(db.Text, nullable=False)
+  # Define o nome exato da tabela no PostgreSQL
+  __tablename__ = "bolsas"
 
-# ROTA PRINCIPAL: Mostra as bolsas e o chat básico
-@app.route('/')
+  # Coluna 'id': Chave Primária (PK), número inteiro que cresce sozinho (auto-increment)
+  id = db.Column(db.Integer, primary_key=True)
+
+  # Coluna 'titulo': Texto de até 150 caracteres, campo obrigatório (nullable=False)
+  titulo = db.Column(db.String(150), nullable=False)
+
+  # Coluna 'descricao': Texto longo para colocar critérios, prazos e requisitos
+  descricao = db.Column(db.Text, nullable=False)
+
+
+# ==============================================================================
+# ROTAS E LÓGICA DE NEGÓCIO (ENDPOINTS)
+# ==============================================================================
+
+
+# ROTA 1: PÁGINA PRINCIPAL (Consulta e visualização)
+# Quando o utilizador acede ao endereço "/" via método GET (leitura padrão)
+@app.route("/")
 def index():
-    # Vai buscar todas as bolsas à base de dados PostgreSQL
-    bolsas_listadas = Bolsa.query.all()
-    return render_template('index.html', bolsas=bolsas_listadas)
+  # 1. Faz uma query ao PostgreSQL equivalente a: SELECT * FROM bolsas;
+  todas_as_bolsas = Bolsa.query.all()
 
-# ROTA PARA ADICIONAR UMA BOLSA (Teste do Admin)
-@app.route('/adicionar', methods=['POST'])
+  # 2. Carrega o ficheiro 'index.html' e envia a variável 'bolsas' com os dados da BD
+  return render_template("index.html", bolsas=todas_as_bolsas)
+
+
+# ROTA 2: PROCESSAMENTO DO FORMULÁRIO DO ADMIN (Criação de novos registos)
+# Esta rota só aceita requisições do tipo POST (quando dados são enviados)
+@app.route("/adicionar", methods=["POST"])
 def adicionar():
-    titulo = request.form.get('titulo')
-    descricao = request.form.get('descricao')
-    
-    nova_bolsa = Bolsa(titulo=titulo, descricao=descricao)
-    db.session.add(nova_bolsa)
-    db.session.commit()
-    
-    return redirect(url_for('index'))
+  # 1. Extrai os valores escritos nos campos do formulário através do atributo name=""
+  titulo_vindo_do_html = request.form.get("titulo")
+  descricao_vinda_do_html = request.form.get("descricao")
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()  # Cria as tabelas automaticamente se não existirem
-    app.run(debug=True)
+  # 2. Cria um novo objeto da classe Bolsa com os dados capturados
+  nova_bolsa = Bolsa(
+      titulo=titulo_vindo_do_html, descricao=descricao_vinda_do_html
+  )
+
+  # 3. Adiciona o objeto à sessão atual da base de dados (preparação)
+  db.session.add(nova_bolsa)
+
+  # 4. Confirma a transação, executando o INSERT INTO no PostgreSQL
+  db.session.commit()
+
+  # 5. Após gravar, redireciona o navegador de volta para a rota 'index'
+  return redirect(url_for("index"))
+
+
+# ==============================================================================
+# BLOCO DE EXECUÇÃO LOCAL DO SERVIDOR
+# ==============================================================================
+if __name__ == "__main__":
+  # O bloco 'with app.app_context()' garante acesso às configurações da aplicação
+  with app.app_context():
+    # Cria automaticamente as tabelas no PostgreSQL caso elas ainda não existam
+    db.create_all()
+
+  # Inicia o servidor local com o modo de depuração ativado (recarrega ao salvar)
+  app.run(debug=True)
