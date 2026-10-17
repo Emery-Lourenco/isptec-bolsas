@@ -1,7 +1,10 @@
-
 # ==============================================================================
 # IMPORTAÇÃO DE MÓDULOS NECESSÁRIOS DO FLASK E SQLALCHEMY
 # ==============================================================================
+import os  # Biblioteca nativa para ler variáveis de ambiente do sistema
+from dotenv import (
+    load_dotenv,  # Carrega as configurações secretas do ficheiro .env
+)
 from flask import (
     Flask,  # O motor central que cria a aplicação web
     redirect,  # Função para redirecionar o utilizador para outra página
@@ -13,6 +16,9 @@ from flask_sqlalchemy import (
     SQLAlchemy,  # A ferramenta (ORM) que faz a ponte entre Python e o PostgreSQL
 )
 
+# Carrega o ficheiro .env local antes de iniciar as configurações
+load_dotenv()
+
 # ==============================================================================
 # INICIALIZAÇÃO DA APLICAÇÃO WEB
 # ==============================================================================
@@ -22,11 +28,8 @@ app = Flask(__name__)
 # ==============================================================================
 # CONFIGURAÇÃO DA BASE DE DADOS (POSTGRESQL)
 # ==============================================================================
-# Define o endereço do PostgreSQL usando o driver psycopg2
-# Formato: postgresql+psycopg2://UTILIZADOR:SENHA@SERVIDOR:PORTA/NOME_DA_BASE_DE_DADOS
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql+psycopg2://postgres:1234@localhost:5432/db_bolsas_isptec"
-)
+# Lê a string de conexão remota definida no ficheiro .env para proteger as credenciais
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
 # Desativa alertas desnecessários de modificação de objetos para poupar memória RAM
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
