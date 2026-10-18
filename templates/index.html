@@ -17,30 +17,20 @@
             color: white;
             padding: 60px 0;
         }
-        .chatbot-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-        .chatbot-card {
-            width: 350px;
-            max-height: 480px;
-        }
-    </style>
+      </style>
 </head>
-<body class="bg-light">
 
-    <!-- 1. BARRA DE NAVEGAÇÃO SUPERIOR -->
+<body class="bg-secondary-subtle">
+
+
+    <!-- barra de navegação superior   -->
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
-        <div class="container">
+          <div class="container">
             <a class="navbar-brand fw-bold text-primary" href="#">
                 <i class="bi bi-mortarboard-fill me-2"></i>Bolsas <span class="text-white">ISPTEC</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -58,25 +48,348 @@
                         <a class="btn btn-outline-light px-4 rounded-pill" href="/login">
                             <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
                         </a>
-                    </li>
-                </ul>
+                 </li>
+            </ul>
+         </div>
+       </div>
+      </nav>
+
+    <!-- Cabeçalho-->
+
+    <div class="p-5 mb-4 bg-light shadow-sm text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+        <h1 class="display-5 fw-bold text-dark">Encontre a sua Oportunidade Académica</h1>
+        <p class="col-md-8 mx-auto text-muted">
+          Agregador de bolsas de estudo nacionais e internacionais com acompanhamento personalizado.
+        </p>
+        <button onclick="location.href='#bolsas'" type="button" class="btn btn-outline-primary rounded-pill">Explorar Bolsas</button>
+    </div>
+
+    <!-- Barra de filtros pra pesquisa -->
+
+    <section class="container my-5" id="bolsas">
+        
+      <div style="margin-top: -19px; position: relative; z-index: 10;" class="card shadow-sm border-0 p-4 rounded-3 bg-white">
+              <h4 class="mb-3 text-dark fw-bold"><i class="bi bi-funnel-fill me-2 text-primary"></i>Filtrar Bolsas de Estudo</h4>
+             <form class="row g-3">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" class="form-control" placeholder="Pesquisar por curso, universidade...">
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-3">
+                    <select class="form-select">
+
+                        <option selected>Todos os Países</option>
+                       <!-- Devem aparecer todos os paises -->
+                        <option>Angola</option>
+                        <option>Portugal</option>
+                        <option>Brasil</option>
+                        <option>Rússia</option>
+                    </select>
             </div>
-        </div>
-    </nav>
 
-    <!-- 2. CABEÇALHO-->
-    <header class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-4 fw-bold">Encontre a sua Oportunidade Académica</h1>
-            <p class="lead mb-4">Agregador de bolsas de estudo nacionais e internacionais com acompanhamento personalizado.</p>
-            <a href="#bolsas" class="btn btn-warning btn-lg px-4 fw-bold shadow-sm">Explorar Bolsas</a>
-        </div>
-    </header>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option selected>Todos os Níveis</option>
+                          <option>Licenciatura</option>
+                        <option>Mestrado</option>
+                     <option>Doutoramento</option>
+                       </select>
+                </div>
 
-
-    
+                  <div class="col-md-1">
+                    <button type="button" class="btn btn-outline-primary w-100">Pesquisar</button>
+                </div>
+        </form>
+      </div>
+    </section>
 
   
+
+
+
+
+    <!-- Catalogo de bolsas disponiveis -->
+    <main  class="container my-5">
+
+        <!-- Título-->
+        <div style="margin-top: -20px; background: #9299a0; " class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
+              <h3 class="fw-bold text-dark m-0">Bolsas em Destaque</h3>
+            <span class="text-muted small">Deslize para ver mais</span>
+        </div>
+
+        <!-- Contentor com Scroll Horizontal -->
+        <div class="d-flex flex-row overflow-x-auto gap-4 pb-3 px-1" style="scroll-snap-type: x mandatory; scrollbar-width: thin;">
+
+            <!-- Cartão Exemplo 1 -->
+            <div style="min-width: 350px; max-width: 380px; flex: 0 0 auto; scroll-snap-align: start;">
+              <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white">
+                
+                <!-- Area de formação -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6">
+                    Engenharia e Tecnologia
+                  </span>
+                  <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
+                    <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> Aberta
+                  </span>
+                </div>
+
+                <!-- Título da Bolsa -->
+                <h5 class="card-title fw-bold text-dark fs-5 mb-2">
+                  Bolsa Nacional de Mérito para o Ensino Superior
+                </h5>
+
+                <!-- Descrição da bolsa -->
+                <p class="card-text text-muted small mb-3">
+                  Apoio a estudantes angolanos com bom aproveitamento académico que pretendam...
+                </p>
+
+
+
+                <!-- Detalhes com Ícones -->
+                <ul class="list-unstyled text-secondary small my-3">
+                   
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-building me-2 fs-6 text-muted"></i>
+                    <span>Instituto Nacional de Gestão de Bolsas de Est...</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-geo-alt me-2 fs-6 text-muted"></i>
+                    <span>Luanda, Angola</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
+                    <span>Licenciatura</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-calendar-event me-2 fs-6 text-muted"></i>
+                    <span>Prazo: 30 de setembro de 2026</span>
+                  </li>
+                </ul>
+
+                <!-- Benefícios da bolsa -->
+                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">
+                      BENEFÍCIO
+                    </span>
+                    <span class="fw-semibold text-dark small">
+                      Propinas integrais + subsídio mensal
+                    </span>
+                  </div>
+                  
+                  <!-- Botão para detalhes -->
+                  <a href="#" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-arrow-up-right"></i>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Cartão Exemplo 2 -->
+            <div style="min-width: 350px; max-width: 380px; flex: 0 0 auto; scroll-snap-align: start;">
+              <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white">
+                
+                <!-- Topo: Categoria e Badge de Estado -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6">
+                    Engenharia e Tecnologia
+                  </span>
+                  <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
+                    <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> A terminar
+                  </span>
+                </div>
+
+                <!-- Título da Bolsa -->
+                <h5 class="card-title fw-bold text-dark fs-5 mb-2">
+                  Bolsa Nacional de Mérito para o Ensino Superior
+                </h5>
+
+                <!-- Descrição Resumida -->
+                <p class="card-text text-muted small mb-3">
+                  Apoio a estudantes angolanos com bom aproveitamento académico que pretendam...
+                </p>
+
+                <!-- Detalhes da bolsa -->
+                <ul class="list-unstyled text-secondary small my-3">
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-building me-2 fs-6 text-muted"></i>
+                    <span>Instituto Nacional de Gestão de Bolsas de Est...</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-geo-alt me-2 fs-6 text-muted"></i>
+                    <span>Luanda, Angola</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
+                    <span>Licenciatura</span>
+                    </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-calendar-event me-2 fs-6 text-muted"></i>
+                    <span>Prazo: 30 de setembro de 2026</span>
+                     </li>
+                </ul>
+
+                  <!-- Benefícios da bolsa -->
+                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">
+                      BENEFÍCIO
+                    </span>
+                    <span class="fw-semibold text-dark small">
+                      Propinas integrais + subsídio mensal
+                    </span>
+                  </div>
+                  
+                  <!-- Botão com Seta para Detalhes -->
+                  <a href="#" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-arrow-up-right"></i>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Cartão Exemplo 3 -->
+            <div style="min-width: 350px; max-width: 380px; flex: 0 0 auto; scroll-snap-align: start;">
+              <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white">
+                
+                <!-- Topo: Categoria e Badge de Estado -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6">
+                    Engenharia e Tecnologia
+                  </span>
+                  <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
+                    <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> A terminar
+                  </span>
+                </div>
+
+                <!-- Título da Bolsa -->
+                <h5 class="card-title fw-bold text-dark fs-5 mb-2">
+                  Bolsa Nacional de Mérito para o Ensino Superior
+                </h5>
+
+                <!-- Descrição Resumida -->
+                <p class="card-text text-muted small mb-3">
+                  Apoio a estudantes angolanos com bom aproveitamento académico que pretendam...
+                </p>
+
+                <!-- Detalhes da bolsa -->
+                <ul class="list-unstyled text-secondary small my-3">
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-building me-2 fs-6 text-muted"></i>
+                    <span>Instituto Nacional de Gestão de Bolsas de Est...</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-geo-alt me-2 fs-6 text-muted"></i>
+                    <span>Luanda, Angola</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
+                    <span>Licenciatura</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-calendar-event me-2 fs-6 text-muted"></i>
+                    <span>Prazo: 30 de setembro de 2026</span>
+                  </li>
+                </ul>
+
+                <!-- Benefícios da bolsa -->
+                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">
+                      BENEFÍCIO
+                    </span>
+                    <span class="fw-semibold text-dark small">
+                      Propinas integrais + subsídio mensal
+                    </span>
+                  </div>
+                  
+                  <!-- Botão com Seta para Detalhes -->
+                  <a href="#" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-arrow-up-right"></i>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Cartão Exemplo 4 -->
+            <div style="min-width: 350px; max-width: 380px; flex: 0 0 auto; scroll-snap-align: start;">
+              <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white">
+                
+                <!-- Área de formação -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6">
+                    Engenharia e Tecnologia
+                  </span>
+                  <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
+                    <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> Aberta
+                  </span>
+                </div>
+
+                <!-- Título da Bolsa -->
+                <h5 class="card-title fw-bold text-dark fs-5 mb-2">
+                  Bolsa Nacional de Mérito para o Ensino Superior
+                </h5>
+
+                <!-- Descrição da bolsa -->
+                <p class="card-text text-muted small mb-3">
+                  Apoio a estudantes angolanos com bom aproveitamento académico que pretendam...
+                </p>
+
+                <!-- Atributos com Ícones -->
+                <ul class="list-unstyled text-secondary small my-3">
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-building me-2 fs-6 text-muted"></i>
+                    <span>Instituto Nacional de Gestão de Bolsas de Est...</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-geo-alt me-2 fs-6 text-muted"></i>
+                    <span>Luanda, Angola</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
+                    <span>Licenciatura</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-calendar-event me-2 fs-6 text-muted"></i>
+                    <span>Prazo: 30 de setembro de 2026</span>
+                  </li>
+                </ul>
+
+                <!-- Benefícios da bolsa -->
+                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">
+                      BENEFÍCIO
+                    </span>
+                    <span class="fw-semibold text-dark small">
+                      Propinas integrais + subsídio mensal
+                    </span>
+                  </div>
+                  
+                  <!-- Botão para Detalhes -->
+                  <a href="#" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-arrow-up-right"></i>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+
+        </div>
+
+    </main>
+
+   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
