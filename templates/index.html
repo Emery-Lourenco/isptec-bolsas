@@ -11,12 +11,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
-        /* Estilos personalizados simples para dar identidade ao ISPTEC */
-        .hero-section {
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-            color: white;
-            padding: 60px 0;
-        }
+
+     
+
       </style>
 </head>
 
@@ -28,18 +25,28 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
           <div class="container">
             <a class="navbar-brand fw-bold text-primary" href="#">
-                <i class="bi bi-mortarboard-fill me-2"></i>Bolsas <span class="text-white">ISPTEC</span>
+                <i class="bi bi-mortarboard-fill me-2"></i>Uni<span class="text-white">BoLSas</span>
             </a>
+
+
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+                </button>
+
+
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
+                        <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
                         <a class="nav-link active" href="#"><i class="bi bi-house-door me-1"></i>Início</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#bolsas"><i class="bi bi-search me-1"></i>Bolsas</a>
+                        <a class="nav-link" href="#como_funciona"><i class="bi bi-info-circle me-1"></i>Como Funciona</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#bolsa"><i class="bi bi-search me-1"></i>Bolsas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#comunidade"><i class="bi bi-people me-1"></i>Mentores & Bolseiros</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#mentorias"><i class="bi bi-person-badge me-1"></i>Mentorias</a>
@@ -54,19 +61,23 @@
        </div>
       </nav>
 
-    <!-- Cabeçalho-->
-
-    <div class="p-5 mb-4 bg-light shadow-sm text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+            <!-- Cabeçalho-->
+<div class="container my-4">
+    <div class="p-5 mb-4 bg-light rounded-4 shadow-sm text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
         <h1 class="display-5 fw-bold text-dark">Encontre a sua Oportunidade Académica</h1>
-        <p class="col-md-8 mx-auto text-muted">
-          Agregador de bolsas de estudo nacionais e internacionais com acompanhamento personalizado.
+        <p class="col-md-8 mx-auto text-muted fs-5">
+          Agregador de bolsas de estudo nacionais e internacionais com acompanhamento personalizado por mentores e bolseiros.
         </p>
-        <button onclick="location.href='#bolsas'" type="button" class="btn btn-outline-primary rounded-pill">Explorar Bolsas</button>
+        <div class="d-flex justify-content-center gap-3 mt-3">
+            <button onclick="location.href='#bolsa'" type="button" class="btn btn-primary rounded-pill px-4">Explorar Bolsas</button>
+            <button onclick="location.href='#comunidade'" type="button" class="btn btn-outline-secondary rounded-pill px-4">Conhecer Mentores</button>
+        </div>
     </div>
+</div>
 
     <!-- Barra de filtros pra pesquisa -->
 
-    <section class="container my-5" id="bolsas">
+    <section class="container my-5" >
         
       <div style="margin-top: -19px; position: relative; z-index: 10;" class="card shadow-sm border-0 p-4 rounded-3 bg-white">
               <h4 class="mb-3 text-dark fw-bold"><i class="bi bi-funnel-fill me-2 text-primary"></i>Filtrar Bolsas de Estudo</h4>
@@ -77,8 +88,6 @@
                         <input type="text" class="form-control" placeholder="Pesquisar por curso, universidade...">
                     </div>
                 </div>
-
-
 
                 <div class="col-md-3">
                     <select class="form-select">
@@ -108,26 +117,174 @@
       </div>
     </section>
 
-  
+    <!-- SECÇÃO SOBRE NÓS E IMPACTO -->
+    <section class="container my-5" id="sobre">
+        <div style="margin-top: -20px; background: #9299a0; " class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
+            <h3 class="fw-bold text-dark m-0">Sobre nós</h3>
+        </div>
+        <div class="card bg-white border-0 shadow-sm rounded-4 p-4">
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <h4 class="fw-bold text-dark mb-3">A tua ponte para o sucesso académico internacional</h4>
+                    <p class="text-muted">
+                        O <strong>UniBoLSas</strong> foi desenvolvido para centralizar oportunidades de bolsas de estudo para estudantes angolanos, conectando candidatos directamente a mentores qualificados e a bolsistas que já vivenciam o processo no estrangeiro.
+                    </p>
+
+
+                </div>
+                <div class="col-md-5">
+                    <div class="row text-center g-3">
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-3 border">
+                                <h3 class="fw-bold text-primary mb-0">+50</h3>
+                                <small class="text-muted">Bolsas Ativas</small>
+                            </div>
+
+
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-3 border">
+                                <h3 class="fw-bold text-success mb-0">+200</h3>
+                                <small class="text-muted">Estudantes Apoiados</small>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- missao visão e valores da comunidade -->
+
+    <section class="container my-5" id="sobre">
+       
+        <div style="margin-top: -19px;" class="card bg-white  shadow-sm rounded-4 p-4">
+            <div class="text-center mb-4">
+            <h4 class="fw-bold text-dark mb-1">O Que Nos Move</h4>
+            <p class="text-muted small m-0">Os pilares fundamentais que guiam a nossa comunidade e mentoria</p>
+        </div>
+
+        <div class="row g-4 text-center">
+            
+            <!-- Missão -->
+            <div class="col-md-4">
+                <div class="p-3 h-100 rounded-3 bg-light border-0">
+                    <div class="mb-3">
+                        <span class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle" style="width: 50px; height: 50px;">
+                            <i class="bi bi-target fs-4"></i>
+                        </span>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Nossa Missão</h5>
+                    <p class="text-muted small mb-0">
+                        Democratizar o acesso à informação sobre bolsas de estudo e capacitar estudantes com a mentoria necessária para alcançarem o sucesso académico.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Visão -->
+            <div class="col-md-4">
+                <div class="p-3 h-100 rounded-3 bg-light border-0">
+                    <div class="mb-3">
+                        <span class="d-inline-flex align-items-center justify-content-center bg-success text-white rounded-circle" style="width: 50px; height: 50px;">
+                            <i class="bi bi-eye-fill fs-4"></i>
+                        </span>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Nossa Visão</h5>
+                    <p class="text-muted small mb-0">
+                        Ser a maior rede de apoio, partilha e mentoria para estudantes e futuros bolseiros em Angola e no exterior.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Valores -->
+            <div class="col-md-4">
 
 
 
+                <div class="p-3 h-100 rounded-3 bg-light border-0">
+                    <div class="mb-3">
+
+
+                        <span class="d-inline-flex align-items-center justify-content-center bg-warning text-dark rounded-circle" style="width: 50px; height: 50px;">
+                            <i class="bi bi-heart-fill fs-4"></i>
+                        </span>
+                    </div>
+
+
+                    <h5 class="fw-bold text-dark mb-2">Nossos Valores</h5>
+                    <p class="text-muted small mb-0">
+                        Transparência no acesso a oportunidades, entreajuda comunitária, rigor na documentação e compromisso com o teu futuro.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </section>
+
+
+    <!-- SECÇÃO COMO FUNCIONA -->
+
+
+    <section class="container my-5" id="como_funciona">
+        <div style="margin-top: -20px; background: #9299a0; " class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
+            <h3 class="fw-bold text-dark m-0">Como Funciona</h3>
+        </div>
+
+
+        <div class="row g-4">
+                     <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
+                    <div class="fs-1 text-primary mb-3"><i class="bi bi-search"></i></div>
+                    <h5 class="fw-bold text-dark">1. Encontre a Bolsa</h5>
+                    <p class="text-muted small mb-0">Explore e filtre as melhores oportunidades de bolsas nacionais e internacionais ajustadas ao teu perfil.</p>
+                
+                  </div>
+              </div>
+
+
+       <div class="col-md-4">
+                  <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
+                    <div class="fs-1 text-primary mb-3"><i class="bi bi-person-check"></i></div>
+                    <h5 class="fw-bold text-dark">2. Receba Acompanhamento</h5>
+                    <p class="text-muted small mb-0">Solicite uma sessão de mentoria com mentores e especialistas para preparar a tua candidatura.</p>
+                </div>
+            </div>
+
+                 <div class="col-md-4">
+                      <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
+                         <div class="fs-1 text-primary mb-3"><i class="bi bi-send-check"></i></div>
+                         <h5 class="fw-bold text-dark">3. Submeta a Candidatura</h5>
+                    <p class="text-muted small mb-0">Envie a tua candidatura com confiança e acompanha todo o processo directamente na plataforma.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Catalogo de bolsas disponiveis -->
-    <main  class="container my-5">
+    <main class="container my-5" id="bolsa">
 
         <!-- Título-->
+
+
         <div style="margin-top: -20px; background: #9299a0; " class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
               <h3 class="fw-bold text-dark m-0">Bolsas em Destaque</h3>
-            <span class="text-muted small">Deslize para ver mais</span>
+                      <span class="text-muted small"></span>
         </div>
 
         <!-- Contentor com Scroll Horizontal -->
+       
+       
         <div class="d-flex flex-row overflow-x-auto gap-4 pb-3 px-1" style="scroll-snap-type: x mandatory; scrollbar-width: thin;">
 
             <!-- Cartão Exemplo 1 -->
             <div style="min-width: 350px; max-width: 380px; flex: 0 0 auto; scroll-snap-align: start;">
+             
+             
               <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white">
+                
                 
                 <!-- Area de formação -->
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -140,6 +297,8 @@
                 </div>
 
                 <!-- Título da Bolsa -->
+
+
                 <h5 class="card-title fw-bold text-dark fs-5 mb-2">
                   Bolsa Nacional de Mérito para o Ensino Superior
                 </h5>
@@ -149,14 +308,16 @@
                   Apoio a estudantes angolanos com bom aproveitamento académico que pretendam...
                 </p>
 
-
-
                 <!-- Detalhes com Ícones -->
+
                 <ul class="list-unstyled text-secondary small my-3">
-                   
+                  
                   <li class="mb-2 d-flex align-items-center">
                     <i class="bi bi-building me-2 fs-6 text-muted"></i>
                     <span>Instituto Nacional de Gestão de Bolsas de Est...</span>
+                 
+                 
+                 
                   </li>
                   <li class="mb-2 d-flex align-items-center">
                     <i class="bi bi-geo-alt me-2 fs-6 text-muted"></i>
@@ -222,15 +383,20 @@
                     <i class="bi bi-building me-2 fs-6 text-muted"></i>
                     <span>Instituto Nacional de Gestão de Bolsas de Est...</span>
                   </li>
-                  <li class="mb-2 d-flex align-items-center">
+
+                         <li class="mb-2 d-flex align-items-center">
                     <i class="bi bi-geo-alt me-2 fs-6 text-muted"></i>
                     <span>Luanda, Angola</span>
-                  </li>
-                  <li class="mb-2 d-flex align-items-center">
-                    <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
+                       </li>
+                 
+                       <li class="mb-2 d-flex align-items-center">
+                   
+                        <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
                     <span>Licenciatura</span>
                     </li>
-                  <li class="mb-2 d-flex align-items-center">
+                 
+                 
+                    <li class="mb-2 d-flex align-items-center">
                     <i class="bi bi-calendar-event me-2 fs-6 text-muted"></i>
                     <span>Prazo: 30 de setembro de 2026</span>
                      </li>
@@ -264,13 +430,17 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                   <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6">
                     Engenharia e Tecnologia
+
                   </span>
+                 
+                 
                   <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
                     <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> A terminar
                   </span>
                 </div>
 
                 <!-- Título da Bolsa -->
+                    
                 <h5 class="card-title fw-bold text-dark fs-5 mb-2">
                   Bolsa Nacional de Mérito para o Ensino Superior
                 </h5>
@@ -289,10 +459,14 @@
                   <li class="mb-2 d-flex align-items-center">
                     <i class="bi bi-geo-alt me-2 fs-6 text-muted"></i>
                     <span>Luanda, Angola</span>
-                  </li>
+
+
+                      </li>
                   <li class="mb-2 d-flex align-items-center">
-                    <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
+                         <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
                     <span>Licenciatura</span>
+
+
                   </li>
                   <li class="mb-2 d-flex align-items-center">
                     <i class="bi bi-calendar-event me-2 fs-6 text-muted"></i>
@@ -303,12 +477,17 @@
                 <!-- Benefícios da bolsa -->
                 <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                   <div>
+
+
                     <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">
                       BENEFÍCIO
+
                     </span>
                     <span class="fw-semibold text-dark small">
                       Propinas integrais + subsídio mensal
                     </span>
+
+
                   </div>
                   
                   <!-- Botão com Seta para Detalhes -->
@@ -329,10 +508,11 @@
                   <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6">
                     Engenharia e Tecnologia
                   </span>
-                  <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
+
+         <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
                     <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> Aberta
-                  </span>
-                </div>
+         </span>
+      </div>
 
                 <!-- Título da Bolsa -->
                 <h5 class="card-title fw-bold text-dark fs-5 mb-2">
@@ -388,35 +568,97 @@
 
     </main>
 
+           <!-- SECÇÃO MENTORES E BOLSeiros -->
+
+
+<section class="container my-5" id="comunidade">
+
+         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
+              <h3 class="fw-bold text-dark m-0">Mentores & Bolseiros em Destaque</h3>
+    </div>
+
+    
+    <div class="d-flex flex-row overflow-x-auto gap-4 pb-3 px-1" style="scroll-snap-type: x mandatory; scrollbar-width: thin;">
+
+<div class="row g-4">
+            <!-- Mentor-->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-person-circle fs-1 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">Eng. Emerson Lourenço</h5>
+                    <span class="badge bg-primary-subtle text-primary rounded-pill mb-3">Mentor Técnico</span>
+                    <p class="text-muted small">Especialista em preparação de cartas de motivação e candidaturas para Bolsas em Engenharia.</p>
+                </div>
+            </div>
+            <!-- Bolsero-->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-mortarboard-fill fs-1 text-success"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">Domingas Neto</h5>
+                    <span class="badge bg-success-subtle text-success rounded-pill mb-3">Bolseira em Portugal</span>
+                    <p class="text-muted small">Aluna de Mestrado na Universidade de Lisboa. Partilha a sua experiência real e dicas de adaptação.</p>
+                </div>
+            </div>
+            <!-- Mentor  -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-person-circle fs-1 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">Dr. Josenilson Luciano</h5>
+                    <span class="badge bg-primary-subtle text-primary rounded-pill mb-3">Mentor de Documentação</span>
+                    <p class="text-muted small">Apoio na revisão de equivalências e preparação para entrevistas de seleção.</p>
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+</section>
+
    <!-- SECÇÃO DE MENTORIAS -->
     <section class="container my-5" id="mentorias">
 
       <!-- Título-->
         <div style="margin-top: -20px; background: #9299a0; " class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
               <h3 class="fw-bold text-dark m-0">Mentorias</h3>
-          
         </div>
 
         <div class="card bg-white border-0 shadow-sm rounded-4 p-5 text-center">
             <h3 class="fw-bold mb-3 text-dark">Precisa de Ajuda para a sua Candidatura?</h3>
             <p class="text-muted mb-4 mx-auto" style="max-width: 600px;">Agende uma sessão de mentoria individual com especialistas para rever a sua carta de motivação e preparar os seus documentos.</p>
             <div>
-                <a href="#" class="btn btn-success btn-lg px-4 rounded-pill shadow-sm">
+
+                <a href="/login" class="btn btn-success btn-lg px-4 rounded-pill shadow-sm">
                     <i class="bi bi-calendar-check me-2"></i>Agendar Mentoria
                 </a>
+
             </div>
+
+
         </div>
     </section>
 
-    <!-- Botão para o Chatbot -->
+    
 
+    
+
+    <!-- Botão para o Chatbot -->
     <div class="position-fixed bottom-0 end-0 p-4" style="z-index: 1050;">
-        <button type="button" class="btn btn-dark rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+        <button data-bs-toggle="collapse" data-bs-target="#chatbotCollapse" type="button" class="btn btn-dark rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
         <i class="bi bi-chat-dots-fill fs-4 text-white"></i>
         </button>
     </div>
-        
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
+    
+
+        
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  </body>
 </html>
