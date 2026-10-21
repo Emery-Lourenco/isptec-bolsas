@@ -341,6 +341,28 @@ def chatbot_responder():
     })
 
 
+# ROTA 3: PAINEL EXCLUSIVO DO CANDIDATO (Atende UC14, UC28 / RF23, RF44)
+@app.route("/dashboard")
+def dashboard():
+    # Obtém todas as bolsas ativas da base de dados PostgreSQL
+    bolsas_disponiveis = Bolsa.query.filter_by(ativa=True).order_by(Bolsa.id.desc()).all()
+    # Obtém bolseiros voluntários verificados
+    bolseiros_lista = BolseiroVoluntario.query.filter_by(verificado=True).all()
+    # Obtém o catálogo de mentorias
+    mentorias_lista = Mentoria.query.filter_by(ativa=True).all()
+
+    # Nome do candidato exibido (dinâmico ou padrão enquanto o login não está concluído)
+    nome_usuario = session.get("utilizador_nome", "Mário Silva")
+
+    return render_template(
+        "dashboard_candidato.html",
+        bolsas=bolsas_disponiveis,
+        bolseiros=bolseiros_lista,
+        mentorias=mentorias_lista,
+        nome_candidato=nome_usuario,
+    )
+
+
 # ==============================================================================
 # BLOCO DE EXECUÇÃO LOCAL E CRIAÇÃO DAS TABELAS
 # ==============================================================================
