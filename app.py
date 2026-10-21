@@ -174,72 +174,76 @@ class ContratacaoMentoria(db.Model):
 # ==============================================================================
 def criar_dados_iniciais():
     """Garante a existência de dados mínimos reais para demonstração do MVP."""
-    # Criar bolseiros voluntários se a tabela estiver vazia
-    if BolseiroVoluntario.query.count() == 0:
-        bolseiros_iniciais = [
-            BolseiroVoluntario(
-                nome="Domingas Neto",
-                situacao="Bolseira atual",
-                bolsa_nome_externo="Bolsa Governo de Portugal",
-                pais="Portugal",
-                universidade="Universidade de Lisboa",
-                curso="Mestrado em Engenharia Informática",
-                ano="2.º Ano",
-                apresentacao="Aluna bolseira com foco em tecnologias web e cloud.",
-                relato="O custo de vida exige organização, mas a adaptação é tranquila.",
-                email_privado="domingas.neto@exemplo.ao",
-                verificado=True,
-            ),
-            BolseiroVoluntario(
-                nome="Josenilson Luciano",
-                situacao="Antigo bolseiro",
-                bolsa_nome_externo="Bolsa Mérito INAGBE",
-                pais="Angola",
-                universidade="ISPTEC",
-                curso="Engenharia Informática",
-                ano="Licenciado",
-                apresentacao="Mentor especializado em equivalências e preparação de processos.",
-                relato="Manter a média acima de 15 valores foi fundamental para a atribuição.",
-                email_privado="josenilson.luciano@exemplo.ao",
-                verificado=True,
-            ),
-            BolseiroVoluntario(
-                nome="Emerson Lourenço",
-                situacao="Bolseiro atual",
-                bolsa_nome_externo="Programa Chevening",
-                pais="Reino Unido",
-                universidade="University of Oxford",
-                curso="Engenharia de Software",
-                ano="1.º Ano",
-                apresentacao="Mentor técnico para redação de cartas de motivação e testes de inglês.",
-                relato="A preparação da candidatura com 6 meses de antecedência fez toda a diferença.",
-                email_privado="emerson.lourenco@exemplo.ao",
-                verificado=True,
-            ),
-        ]
-        db.session.bulk_save_objects(bolseiros_iniciais)
-        db.session.commit()
+    try:
+        # Criar bolseiros voluntários se a tabela estiver vazia
+        if BolseiroVoluntario.query.count() == 0:
+            bolseiros_iniciais = [
+                BolseiroVoluntario(
+                    nome="Domingas Neto",
+                    situacao="Bolseira atual",
+                    bolsa_nome_externo="Bolsa Governo de Portugal",
+                    pais="Portugal",
+                    universidade="Universidade de Lisboa",
+                    curso="Mestrado em Engenharia Informática",
+                    ano="2.º Ano",
+                    apresentacao="Aluna bolseira com foco em tecnologias web e cloud.",
+                    relato="O custo de vida exige organização, mas a adaptação é tranquila.",
+                    email_privado="domingas.neto@exemplo.ao",
+                    verificado=True,
+                ),
+                BolseiroVoluntario(
+                    nome="Josenilson Luciano",
+                    situacao="Antigo bolseiro",
+                    bolsa_nome_externo="Bolsa Mérito INAGBE",
+                    pais="Angola",
+                    universidade="ISPTEC",
+                    curso="Engenharia Informática",
+                    ano="Licenciado",
+                    apresentacao="Mentor especializado em equivalências e preparação de processos.",
+                    relato="Manter a média acima de 15 valores foi fundamental para a atribuição.",
+                    email_privado="josenilson.luciano@exemplo.ao",
+                    verificado=True,
+                ),
+                BolseiroVoluntario(
+                    nome="Emerson Lourenço",
+                    situacao="Bolseiro atual",
+                    bolsa_nome_externo="Programa Chevening",
+                    pais="Reino Unido",
+                    universidade="University of Oxford",
+                    curso="Engenharia de Software",
+                    ano="1.º Ano",
+                    apresentacao="Mentor técnico para redação de cartas de motivação e testes de inglês.",
+                    relato="A preparação da candidatura com 6 meses de antecedência fez toda a diferença.",
+                    email_privado="emerson.lourenco@exemplo.ao",
+                    verificado=True,
+                ),
+            ]
+            db.session.bulk_save_objects(bolseiros_iniciais)
+            db.session.commit()
 
-    # Criar catálogo de mentorias se estiver vazio
-    if Mentoria.query.count() == 0:
-        mentorias_iniciais = [
-            Mentoria(
-                titulo="Revisão Completa de Carta de Motivação",
-                descricao="Análise linha a linha dos teus objetivos com sugestões práticas de melhoria.",
-                duracao="45 minutos",
-                preco_kz=15000.00,
-                nome_mentor="Eng. Emerson Lourenço",
-            ),
-            Mentoria(
-                titulo="Preparação de Documentação e Equivalências",
-                descricao="Orientação sobre autenticação no MIREX, Ministério e consulados para bolsas externas.",
-                duracao="1 hora",
-                preco_kz=20000.00,
-                nome_mentor="Dr. Josenilson Luciano",
-            ),
-        ]
-        db.session.bulk_save_objects(mentorias_iniciais)
-        db.session.commit()
+        # Criar catálogo de mentorias se estiver vazio
+        if Mentoria.query.count() == 0:
+            mentorias_iniciais = [
+                Mentoria(
+                    titulo="Revisão Completa de Carta de Motivação",
+                    descricao="Análise linha a linha dos teus objetivos com sugestões práticas de melhoria.",
+                    duracao="45 minutos",
+                    preco_kz=15000.00,
+                    nome_mentor="Eng. Emerson Lourenço",
+                ),
+                Mentoria(
+                    titulo="Preparação de Documentação e Equivalências",
+                    descricao="Orientação sobre autenticação no MIREX, Ministério e consulados para bolsas externas.",
+                    duracao="1 hora",
+                    preco_kz=20000.00,
+                    nome_mentor="Dr. Josenilson Luciano",
+                ),
+            ]
+            db.session.bulk_save_objects(mentorias_iniciais)
+            db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(f"Aviso durante a inicialização de dados: {e}")
 
 
 # ==============================================================================
@@ -304,7 +308,7 @@ def chatbot_responder():
         return jsonify({"resposta": "Por favor, escreve uma pergunta para que te possa ajudar."})
 
     # Regra 1: Dúvidas sobre bolsas integrais / 100% comparticipadas
-    if "integral" in mensagem or "100%" in mensagem or "comparticipada" in mensagem:
+    if "integral" in mensagem or "100%" in mensagem or "comparticipada" in mensagem or "integrais" in mensagem:
         total_integrais = Bolsa.query.filter_by(ativa=True, cobertura="integral").count()
         return jsonify({
             "resposta": f"Atualmente temos {total_integrais} bolsa(s) 100% comparticipada(s) no portal. As bolsas integrais cobrem propinas e alojamento sem custos diretos para ti."
