@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
-        /* forçar o scroll horizontal s */
+        /* forçar o scroll horizontal */
         .scroll-horizontal {
             display: flex !important;
             flex-wrap: nowrap !important;
@@ -33,7 +33,7 @@
             scroll-snap-align: start;
         }
 
-        /* para fixar o botão de favorito  */
+        /* para fixar o botão de favorito */
         .card-favorite-btn {
             position: absolute;
             top: 15px;
@@ -68,12 +68,10 @@
 
 <body class="bg-secondary-subtle">
 
-<!--Barra de navegação superior-->
-
+    <!-- Barra de navegação superior -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
-
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="#">
+            <a class="navbar-brand fw-bold text-primary" href="/">
                 <i class="bi bi-mortarboard-fill me-2"></i>Uni<span class="text-white">BoLSas</span>
             </a>
 
@@ -99,12 +97,11 @@
                         <a class="nav-link" href="#bolseiros-comunidade"><i class="bi bi-people me-1"></i>Bolseiros</a>
                     </li>
                     
-            <!-- menu do perfil do candidato -->
-
+                    <!-- menu do perfil do candidato -->
                     <li class="nav-item dropdown ms-lg-3 mt-2 mt-lg-0">
                         <a class="btn btn-outline-light rounded-pill dropdown-toggle d-flex align-items-center gap-2" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                     <i class="bi bi-person-circle fs-5"></i>
-                            <span>Mário Silva</span>
+                            <i class="bi bi-person-circle fs-5"></i>
+                            <span>{{ nome_candidato }}</span>
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3" aria-labelledby="userDropdown">
@@ -119,11 +116,10 @@
         </div>
     </nav>
 
-           <!-- Cabeçalho  -->
-
+    <!-- Cabeçalho -->
     <div class="container my-4">
         <div class="p-5 mb-4 bg-light rounded-4 shadow-sm text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-            <h1 class="display-6 fw-bold text-dark">Bem-vindo de volta, Mário!</h1>
+            <h1 class="display-6 fw-bold text-dark">Bem-vindo de volta, {{ nome_candidato }}!</h1>
             <p class="col-md-8 mx-auto text-muted fs-6">
               Gere as tuas bolsas favoritas, solicita mentoria especializada para rever a tua documentação e conversa com bolseiros no estrangeiro.
             </p>
@@ -134,7 +130,7 @@
         </div>
     </div>
 
-    <!-- perfil -->
+    <!-- Estatísticas rápidas do painel -->
     <section class="container mb-5" id="painel">
         <div class="row g-3">
             <div class="col-md-4">
@@ -143,7 +139,7 @@
                         <i class="bi bi-bookmark-star-fill fs-3"></i>
                     </div>
                     <div>
-                        <h4 class="fw-bold mb-0">3</h4>
+                        <h4 class="fw-bold mb-0">1</h4>
                         <small class="text-muted">Bolsas Guardadas</small>
                     </div>
                 </div>
@@ -154,8 +150,8 @@
                         <i class="bi bi-calendar-check-fill fs-3"></i>
                     </div>
                     <div>
-                        <h4 class="fw-bold mb-0">1</h4>
-                        <small class="text-muted">Mentoria Solicitada</small>
+                        <h4 class="fw-bold mb-0">{{ mentorias|length }}</h4>
+                        <small class="text-muted">Mentorias Disponíveis</small>
                     </div>
                 </div>
             </div>
@@ -165,7 +161,7 @@
                         <i class="bi bi-people-fill fs-3"></i>
                     </div>
                     <div>
-                        <h4 class="fw-bold mb-0">+20</h4>
+                        <h4 class="fw-bold mb-0">+{{ bolseiros|length }}</h4>
                         <small class="text-muted">Bolseiros para Apoio</small>
                     </div>
                 </div>
@@ -173,20 +169,16 @@
         </div>
     </section>
 
-    <!--BOLSAS EM DESTAQUE (-->
+    <!-- BOLSAS EM DESTAQUE  -->
     <main class="container my-5" id="bolsas-destaque">
-        <!-- título-->
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between align-items-center border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0 fs-4">Bolsas em Destaque</h3>
-            <a href="/todas-bolsas.html" class="btn btn-dark btn-sm rounded-pill px-3">
-                Ver Todas <i class="bi bi-arrow-right ms-1"></i>
-            </a>
+            <span class="badge bg-dark rounded-pill px-3 py-2">{{ bolsas|length }} bolsas ativas</span>
         </div>
 
-        <!-- Contentor com scroll -->
+                      <!-- Contentor com scroll  -->
         <div class="scroll-horizontal gap-4 px-1">
-
-            <!-- cartão 1 -->
+            {% for b in bolsas %}
             <div class="scroll-item-card">
                 <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white position-relative">
                     
@@ -194,157 +186,47 @@
                         <i class="bi bi-bookmark-star-fill fs-5"></i>
                     </button>
 
-                <div class="d-flex align-items-center gap-2 mb-3 pe-5">
-                        <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6 text-truncate" style="max-width: 170px;">Engenharia e Tecnologia</span>
-                        <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
-                            <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> 100% Integral
-                        </span>
-                </div>
-
-                    
-                <h5 class="card-title fw-bold text-dark fs-5 mb-2">Bolsa Nacional de Mérito</h5>
-                    <p class="card-text text-muted small mb-3 card-desc-limit">Apoio a estudantes angolanos com bom aproveitamento académico em cursos de engenharia e tecnologia...</p>
-
-                    <ul class="list-unstyled text-secondary small my-3">
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-building me-2 text-muted"></i><span>INAGBE</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-geo-alt me-2 text-muted"></i><span>Luanda, Angola</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-mortarboard me-2 text-muted"></i><span>Licenciatura</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-calendar-event me-2 text-muted"></i><span>Prazo: 30/09/2026</span></li>
-                    </ul>
-
-                    <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">BENEFÍCIO</span>
-                            <span class="fw-semibold text-dark small">Propinas integrais + Subsídio</span>
-                        </div>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Caartão 2 -->
-            <div class="scroll-item-card">
-                <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white position-relative">
-                    
-                      <button class="card-favorite-btn text-secondary" onclick="toggleFavorite(this)" title="Guardar Bolsa">
-                        <i class="bi bi-bookmark-star fs-5"></i>
-                    </button>
-
-                 <div class="d-flex align-items-center gap-2 mb-3 pe-5">
-                        <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6 text-truncate" style="max-width: 170px;">Engenharia e Tecnologia</span>
-                        <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3 py-2 d-inline-flex align-items-center">
-                            <span class="p-1 bg-warning rounded-circle me-1 d-inline-block"></span> Parcial
-                        </span>
-                    </div>
-
-                    <h5 class="card-title fw-bold text-dark fs-5 mb-2">Programa Cooperação Luso-Angolana</h5>
-                    <p class="card-text text-muted small mb-3 card-desc-limit">Bolsas de estudo para cursos de mestrado em universidades públicas portuguesas...</p>
-
-                     <ul class="list-unstyled text-secondary small my-3">
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-building me-2 text-muted"></i><span>Univ. de Lisboa</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-geo-alt me-2 text-muted"></i><span>Lisboa, Portugal</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-mortarboard me-2 text-muted"></i><span>Mestrado</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-calendar-event me-2 text-muted"></i><span>Prazo: 15/10/2026</span></li>
-                    </ul>
-
-                    <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">BENEFÍCIO</span>
-                            <span class="fw-semibold text-dark small">Alojamento + Isenção parcial</span>
-                        </div>
-                        <a href="#" target="_blank" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                            <i class="bi bi-arrow-up-right"></i>
-                     </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- cartão 3 -->
-            <div class="scroll-item-card">
-                <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white position-relative">
-                    
-                    <button class="card-favorite-btn text-secondary" onclick="toggleFavorite(this)" title="Guardar Bolsa">
-                        <i class="bi bi-bookmark-star fs-5"></i>
-                    </button>
-
                     <div class="d-flex align-items-center gap-2 mb-3 pe-5">
-                 <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6 text-truncate" style="max-width: 170px;">Ciências Sociais e Humana</span>
-                        <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
-                           
-                            <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> 100% Integral
+                        <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6 text-truncate" style="max-width: 170px;">
+                            {{ b.area_estudo or 'Geral' }}
                         </span>
-
+                        {% if b.cobertura == 'integral' %}
+                            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
+                                <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> 100% Integral
+                            </span>
+                        {% else %}
+                            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3 py-2 d-inline-flex align-items-center">
+                                <span class="p-1 bg-warning rounded-circle me-1 d-inline-block"></span> Parcial
+                            </span>
+                        {% endif %}
                     </div>
 
-                <h5 class="card-title fw-bold text-dark fs-5 mb-2">Bolsas de Estudo no Brasil (GCUB)</h5>
-                       <p class="card-text text-muted small mb-3 card-desc-limit">Oportunidades de graduação integral em várias universidades federais brasileiras...</p>
+                    <h5 class="card-title fw-bold text-dark fs-5 mb-2">{{ b.titulo }}</h5>
+                    <p class="card-text text-muted small mb-3 card-desc-limit">{{ b.descricao }}</p>
 
                     <ul class="list-unstyled text-secondary small my-3">
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-building me-2 text-muted"></i><span>GCUB / Brasil</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-geo-alt me-2 text-muted"></i><span>Brasil</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-mortarboard me-2 text-muted"></i><span>Licenciatura</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-calendar-event me-2 text-muted"></i><span>Prazo: 20/11/2026</span></li>
+                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-building me-2 text-muted"></i><span>{{ b.entidade }}</span></li>
+                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-geo-alt me-2 text-muted"></i><span>{{ b.pais_destino }} ({{ b.tipo|capitalize }})</span></li>
+                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-mortarboard me-2 text-muted"></i><span>{{ b.nivel_estudo or 'Licenciatura' }}</span></li>
+                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-calendar-event me-2 text-muted"></i><span>Prazo: {% if b.data_limite %}{{ b.data_limite.strftime('%d/%m/%Y') }}{% else %}Aberto{% endif %}</span></li>
                     </ul>
 
                     <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                         <div>
                             <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">BENEFÍCIO</span>
-                            <span class="fw-semibold text-dark small">Isenção de propinas</span>
+                            <span class="fw-semibold text-dark small">{{ b.beneficio_resumo or 'Propinas integrais + Subsídio' }}</span>
                         </div>
-                        <a href="#" target="_blank" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                        <a href="{{ b.link_oficial }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
                             <i class="bi bi-arrow-up-right"></i>
                         </a>
                     </div>
                 </div>
             </div>
-
-            <!-- cartão 4-->
-     <div class="scroll-item-card">
-                <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white position-relative">
-                    
-                    <button class="card-favorite-btn text-secondary" onclick="toggleFavorite(this)" title="Guardar Bolsa">
-                        <i class="bi bi-bookmark-star fs-5"></i>
-                    </button>
-
-                    <div class="d-flex align-items-center gap-2 mb-3 pe-5">
-                        <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6 text-truncate" style="max-width: 170px;">Saúde e Medicina</span>
-                        <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
-                            <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> 100% Integral
-                        </span>
-                    </div>
-
-                    <h5 class="card-title fw-bold text-dark fs-5 mb-2">Bolsa Chevening Reino Unido</h5>
-                    <p class="card-text text-muted small mb-3 card-desc-limit">Bolsas globais do governo britânico para líderes e futuros especialistas...</p>
-
-                    <ul class="list-unstyled text-secondary small my-3">
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-building me-2 text-muted"></i><span>Governo Britânico</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-geo-alt me-2 text-muted"></i><span>Reino Unido</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-mortarboard me-2 text-muted"></i><span>Mestrado</span></li>
-                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-calendar-event me-2 text-muted"></i><span>Prazo: 02/11/2026</span></li>
-                    </ul>
-
-                    <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">BENEFÍCIO</span>
-                            <span class="fw-semibold text-dark small">Cobertura Total + Voos</span>
-                        </div>
-                        <a href="#" target="_blank" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
+            {% endfor %}
         </div>
     </main>
 
-
-
-
 <!-- Bolsas guardadas -->
-
     <section class="container my-5" id="guardadas">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0 fs-4">Minhas Bolsas Guardadas</h3>
@@ -352,50 +234,46 @@
 
         <div class="card bg-white border-0 shadow-sm rounded-4 p-4">
             <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-
-
+                <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
+
 
                             <th>Bolsa de Estudo</th>
                             <th>Entidade / País</th>
                             <th>Prazo Final</th>
                             <th class="text-end">Ação</th>
                         </tr>
-
-                </thead>
+                    </thead>
                     <tbody>
+                        {% if bolsas %}
                         <tr>
                             <td>
-                                <strong>Bolsa Nacional de Mérito</strong><br>
-                                <small class="text-muted">Licenciatura</small>
+                                <strong>{{ bolsas[0].titulo }}</strong><br>
+                                <small class="text-muted">{{ bolsas[0].nivel_estudo or 'Ensino Superior' }}</small>
                             </td>
-                            <td>INAGBE (Angola)</td>
-                            <td>30/09/2026</td>
+                            <td>{{ bolsas[0].entidade }} ({{ bolsas[0].pais_destino }})</td>
+                            <td>{% if bolsas[0].data_limite %}{{ bolsas[0].data_limite.strftime('%d/%m/%Y') }}{% else %}Aberto{% endif %}</td>
                             <td class="text-end">
-                                <a href="#" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">Ir para o Site Oficial <i class="bi bi-box-arrow-up-right ms-1"></i></a>
+                                <a href="{{ bolsas[0].link_oficial }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">Ir para o Site Oficial <i class="bi bi-box-arrow-up-right ms-1"></i></a>
                                 <button class="btn btn-outline-danger btn-sm rounded-circle ms-1" title="Remover dos favoritos"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
-                </tbody>
-            </table>
-        </div>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 
-<!--Mentores-->
+               <!-- Mentores Técnicos -->
     <section class="container my-5" id="mentores-tecnicos">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between align-items-center border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0 fs-4">Mentores Técnicos Especiais</h3>
-            <a href="#" class="btn btn-dark btn-sm rounded-pill px-3">
-                Ver Todos <i class="bi bi-arrow-right ms-1"></i>
-            </a>
         </div>
 
         <div class="scroll-horizontal gap-4 px-1">
-
-            <!-- mentor 1 -->
+            {% for m in mentorias %}
             <div class="scroll-item-person">
                 <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column">
                     <div class="flex-grow-1 d-flex flex-column justify-content-between">
@@ -403,198 +281,51 @@
                             <div class="mb-2">
                                 <i class="bi bi-person-circle fs-1 text-primary"></i>
                             </div>
-                            <h5 class="fw-bold text-dark mb-1">Eng. Emerson Lourenço</h5>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill mb-2">Mentor Técnico</span>
-                            <p class="text-muted small mb-2 card-desc-limit">Revisão completa de cartas de motivação e preparação de dossiers para Engenharia.</p>
+                            <h5 class="fw-bold text-dark mb-1">{{ m.nome_mentor }}</h5>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill mb-2">Mentor Especialista</span>
+                            <p class="text-muted small mb-2 card-desc-limit">{{ m.descricao }}</p>
                         </div>
-                        <small class="text-secondary d-block my-2"><i class="bi bi-clock me-1"></i>Duração: 45 min</small>
+                        <small class="text-secondary d-block my-2"><i class="bi bi-clock me-1"></i>Duração: {{ m.duracao }}</small>
                     </div>
                     <div class="pt-3 border-top d-flex justify-content-between align-items-center mt-auto">
-                        <span class="fw-bold text-success fs-6">15.000 Kz</span>
-                        <button class="btn btn-success btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
-                            Solicitar
-                        </button>
+                        <span class="fw-bold text-success fs-6">{{ "{:,.2f}".format(m.preco_kz).replace(',', ' ').replace('.', ',') }} Kz</span>
+                        <button class="btn btn-success btn-sm rounded-pill px-3">Solicitar</button>
                     </div>
                 </div>
             </div>
-
-            <!-- mentor 2 -->
-            <div class="scroll-item-person">
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column">
-                    <div class="flex-grow-1 d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="mb-2">
-                                <i class="bi bi-person-circle fs-1 text-primary"></i>
-                            </div>
-                            <h5 class="fw-bold text-dark mb-1">Dr. Josenilson Luciano</h5>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill mb-2">Mentor de Documentação</span>
-                            <p class="text-muted small mb-2 card-desc-limit">Orientação sobre autenticações no MIREX, equivalências e vistos académicos.</p>
-                        </div>
-                        <small class="text-secondary d-block my-2"><i class="bi bi-clock me-1"></i>Duração: 1 hora</small>
-                    </div>
-                    <div class="pt-3 border-top d-flex justify-content-between align-items-center mt-auto">
-                        <span class="fw-bold text-success fs-6">20.000 Kz</span>
-                        <button class="btn btn-success btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
-                            Solicitar
-                        </button>
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- mentor 3 -->
-            <div class="scroll-item-person">
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column">
-                    <div class="flex-grow-1 d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="mb-2">
-                                <i class="bi bi-person-circle fs-1 text-primary"></i>
-                            </div>
-                            <h5 class="fw-bold text-dark mb-1">Dra. Sofia Manuel</h5>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill mb-2">Mentora de Entrevistas</span>
-                            <p class="text-muted small mb-2 card-desc-limit">Simulação prática de entrevistas presenciais e em vídeo com bancas examinadoras.</p>
-                        </div>
-                        <small class="text-secondary d-block my-2"><i class="bi bi-clock me-1"></i>Duração: 1 hora</small>
-                    </div>
-                    <div class="pt-3 border-top d-flex justify-content-between align-items-center mt-auto">
-                        <span class="fw-bold text-success fs-6">18.000 Kz</span>
-                        <button class="btn btn-success btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
-                            Solicitar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- mentor 4-->
-            <div class="scroll-item-person">
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column">
-                    <div class="flex-grow-1 d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="mb-2">
-                                <i class="bi bi-person-circle fs-1 text-primary"></i>
-                            </div>
-                            <h5 class="fw-bold text-dark mb-1">Prof. António Pedro</h5>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill mb-2">Mentor Académico</span>
-                            <p class="text-muted small mb-2 card-desc-limit">Apoio na elaboração de projetos de investigação e candidaturas de Doutoramento com acompanhamento completo.</p>
-                        </div>
-                        <small class="text-secondary d-block my-2"><i class="bi bi-clock me-1"></i>Duração: 1 hora</small>
-                    </div>
-                    <div class="pt-3 border-top d-flex justify-content-between align-items-center mt-auto">
-                        <span class="fw-bold text-success fs-6">25.000 Kz</span>
-                        <button class="btn btn-success btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
-                            Solicitar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
+            {% endfor %}
         </div>
     </section>
 
-        <!-- 4. Bolseiros VOluntarios -->
+ <!-- Bolseiros Voluntários Dinâmicos -->
     <section class="container my-5" id="bolseiros-comunidade">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between align-items-center border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0 fs-4">Bolseiros (Apoio Comunitário)</h3>
-            <a href="#" class="btn btn-dark btn-sm rounded-pill px-3">
-                Ver Todos <i class="bi bi-arrow-right ms-1"></i>
-            </a>
         </div>
 
         <div class="scroll-horizontal gap-4 px-1">
-
-              <!-- bolseiro 1 -->
-
+            {% for bol in bolseiros %}
             <div class="scroll-item-person">
                 <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column justify-content-between">
                     <div>
                         <div class="mb-2">
                             <i class="bi bi-mortarboard-fill fs-1 text-success"></i>
                         </div>
-                        <h5 class="fw-bold text-dark mb-1">Domingas Neto</h5>
-                        <span class="badge bg-success-subtle text-success rounded-pill mb-2">Bolseira em Portugal</span>
-                        <p class="text-muted small fw-semibold mb-1">Mestrado na Univ. de Lisboa</p>
-                        <p class="text-muted small mb-3 card-desc-limit">Partilho a minha experiência real sobre visto, alojamento e custo de vida.</p>
+                        <h5 class="fw-bold text-dark mb-1">{{ bol.nome }}</h5>
+                        <span class="badge bg-success-subtle text-success rounded-pill mb-2">{{ bol.situacao }} ({{ bol.pais }})</span>
+                        <p class="text-muted small fw-semibold mb-1">{{ bol.curso }}</p>
+                        <p class="text-muted small mb-3 card-desc-limit">{{ bol.relato }}</p>
                     </div>
                     <div class="pt-3 border-top mt-auto">
-                        <button class="btn btn-outline-primary btn-sm rounded-pill w-100" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
-                            Conversar com Bolseira
-                        </button>
+                        <button class="btn btn-outline-primary btn-sm rounded-pill w-100">Conversar com Bolseiro</button>
                     </div>
                 </div>
             </div>
-
-            <!-- bolseiro 2 -->
-            <div class="scroll-item-person">
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="mb-2">
-                            <i class="bi bi-mortarboard-fill fs-1 text-success"></i>
-                        </div>
-                        <h5 class="fw-bold text-dark mb-1">Helmer Almeida</h5>
-                        <span class="badge bg-success-subtle text-success rounded-pill mb-2">Bolseiro no Brasil</span>
-                        <p class="text-muted small fw-semibold mb-1">Licenciatura em São Paulo</p>
-                        <p class="text-muted small mb-3 card-desc-limit">Apoio em dúvidas sobre a adaptação às universidades brasileiras.</p>
-                    </div>
-                    <div class="pt-3 border-top mt-auto">
-                        <button class="btn btn-outline-primary btn-sm rounded-pill w-100" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
-                            Conversar com Bolseiro
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- bolseiro 3 -->
-            <div class="scroll-item-person">
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="mb-2">
-                            <i class="bi bi-mortarboard-fill fs-1 text-success"></i>
-                        </div>
-                        <h5 class="fw-bold text-dark mb-1">Kiesse Pessoa</h5>
-
-                        <span class="badge bg-success-subtle text-success rounded-pill mb-2">Bolseiro na Rússia</span>
-                        <p class="text-muted small fw-semibold mb-1">Engenharia em Moscovo</p>
-                        <p class="text-muted small mb-3 card-desc-limit">Dicas práticas sobre processo de visto, língua russa e vida académica.</p>
-                    </div>
-                    <div class="pt-3 border-top mt-auto">
-                        <button class="btn btn-outline-primary btn-sm rounded-pill w-100" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
-                            Conversar com Bolseiro
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-    <!-- bolseiro 4 -->
-
-            <div class="scroll-item-person">
-               
-               
-               
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="mb-2">
-                            <i class="bi bi-mortarboard-fill fs-1 text-success"></i>
-                        </div>
-                        <h5 class="fw-bold text-dark mb-1">Ana Beatriz</h5>
-                        <span class="badge bg-success-subtle text-success rounded-pill mb-2">Bolseira no Reino Unido</span>
-                        <p class="text-muted small fw-semibold mb-1">Mestrado em Londres</p>
-                        <p class="text-muted small mb-3 card-desc-limit">Orientação sobre candidatura Chevening e exames de proficiência em inglês.</p>
-                    </div>
-                    <div class="pt-3 border-top mt-auto">
-                        <button class="btn btn-outline-primary btn-sm rounded-pill w-100" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
-                            Conversar com Bolseira
-                        </button>
-                    </div>
-                </div>
-            </div>
-
+            {% endfor %}
         </div>
     </section>
 
-    
-    
-
-    <!-- Rodapé -->
+               <!-- Rodapé -->
     <footer class="bg-dark text-white pt-5 pb-4 mt-5">
         <div class="container">
             <div class="row g-4">
@@ -628,15 +359,15 @@
         </div>
     </footer>
 
-    <!-- botão para o chatbot -->
+ <!-- botão para o chatbot -->
     <div class="position-fixed bottom-0 end-0 p-4" style="z-index: 1050;">
         <button data-bs-toggle="collapse" data-bs-target="#chatbotCollapse" type="button" class="btn btn-dark rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
             <i class="bi bi-chat-dots-fill fs-4 text-white"></i>
         </button>
     </div>
 
-    <!-- Codigo do chatbot -->
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050; width: 300px;">
+    <!-- Codigo do chatbot interativo conectado à API do Flask -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050; width: 320px;">
         <div class="collapse mb-2" id="chatbotCollapse">
             <div class="card chatbot-card shadow-lg border-0 rounded-3">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -644,19 +375,18 @@
                         <h6 class="mb-0 fw-bold">UniX - Assistente de Bolsas</h6>
                         <small class="text-light" style="font-size: 0.75rem;">Online</small>
                     </div>
-
-            <button type="button" class="btn-close btn-close-white" data-bs-toggle="collapse" data-bs-target="#chatbotCollapse"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-toggle="collapse" data-bs-target="#chatbotCollapse"></button>
                 </div>
                 <div class="card-body overflow-auto bg-light" style="height: 280px;" id="chatMessages">
                     <div class="p-2 bg-white rounded shadow-sm mb-2 text-dark fs-7">
-                        Olá Mário! Como posso ajudar-te na gestão das tuas bolsas hoje?
+                        Olá {{ nome_candidato }}! Como posso ajudar-te na gestão das tuas bolsas hoje?
                     </div>
                 </div>
                 <div class="card-footer bg-white border-0">
-                    <div class="input-group">
-                        <input type="text" class="form-control form-control-sm" placeholder="escreva a sua dúvida...">
-                        <button class="btn btn-primary btn-sm" type="button"><i class="bi bi-send-fill"></i></button>
-                    </div>
+                    <form id="chatForm" class="input-group">
+                        <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="escreva a sua dúvida..." required autocomplete="off">
+                        <button class="btn btn-primary btn-sm" type="submit"><i class="bi bi-send-fill"></i></button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -664,7 +394,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-             <!-- Mudar a cor do botão de favorito-->
+    <!-- Mudar a cor do botão de favorito e script do Chatbot -->
     <script>
         function toggleFavorite(btn) {
             const icon = btn.querySelector('i');
@@ -680,6 +410,45 @@
                 btn.classList.add('text-secondary');
             }
         }
+
+        // Envio de mensagens para o Chatbot UniX
+        document.getElementById('chatForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const mensagem = input.value.trim();
+            if (!mensagem) return;
+
+            const chatMessages = document.getElementById('chatMessages');
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'p-2 bg-primary text-white rounded shadow-sm mb-2 text-end ms-auto fs-7';
+            userMsg.style.maxWidth = '85%';
+            userMsg.textContent = mensagem;
+            chatMessages.appendChild(userMsg);
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chatbot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mensagem: mensagem })
+                });
+                const data = await response.json();
+
+                const botMsg = document.createElement('div');
+                botMsg.className = 'p-2 bg-white rounded shadow-sm mb-2 text-dark fs-7 border';
+                botMsg.style.maxWidth = '85%';
+                botMsg.textContent = data.resposta;
+                chatMessages.appendChild(botMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } catch (err) {
+                const errMsg = document.createElement('div');
+                errMsg.className = 'p-2 bg-danger-subtle text-danger rounded shadow-sm mb-2 fs-7';
+                errMsg.textContent = 'Erro de comunicação com o assistente virtual.';
+                chatMessages.appendChild(errMsg);
+            }
+        });
     </script>
 </body>
 </html>
