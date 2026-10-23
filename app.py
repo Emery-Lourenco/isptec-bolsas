@@ -175,7 +175,20 @@ class ContratacaoMentoria(db.Model):
 def criar_dados_iniciais():
     """Garante a existência de dados mínimos reais para demonstração do MVP."""
     try:
-        # Criar bolseiros voluntários se a tabela estiver vazia
+        # 1. Criar o Administrador Inicial único caso não exista
+        admin_existente = Utilizador.query.filter_by(tipo="admin").first()
+        if not admin_existente:
+            novo_admin = Utilizador(
+                nome="Admin",
+                email="admin@unibolsas.ao",
+                tipo="admin"
+            )
+            novo_admin.definir_senha("1234")
+            db.session.add(novo_admin)
+            db.session.commit()
+            print("Conta de Administrador criada com sucesso (admin@unibolsas.ao)!")
+
+        # 2. Criar bolseiros voluntários se a tabela estiver vazia
         if BolseiroVoluntario.query.count() == 0:
             bolseiros_iniciais = [
                 BolseiroVoluntario(
@@ -221,7 +234,7 @@ def criar_dados_iniciais():
             db.session.bulk_save_objects(bolseiros_iniciais)
             db.session.commit()
 
-        # Criar catálogo de mentorias se estiver vazio
+        # 3. Criar catálogo de mentorias se estiver vazio
         if Mentoria.query.count() == 0:
             mentorias_iniciais = [
                 Mentoria(
@@ -351,8 +364,8 @@ def dashboard():
     # Obtém o catálogo de mentorias
     mentorias_lista = Mentoria.query.filter_by(ativa=True).all()
 
-    # Nome do candidato exibido (dinâmico ou padrão enquanto o login não está concluído)
-    nome_usuario = session.get("utilizador_nome", "Mário Silva")
+    # Nome do candidato exibido a partir da sessão ativa (ou fallback amigável)
+    nome_usuario = session.get("utilizador_nome", "Candidato")
 
     return render_template(
         "dashboard_candidato.html",
@@ -361,6 +374,58 @@ def dashboard():
         mentorias=mentorias_lista,
         nome_candidato=nome_usuario,
     )
+
+
+# ROTA 4: CRIAÇÃO DE CONTA DE UTILIZADOR (Atende UC01 / RF01, RNF04)
+@app.route("/criar-conta", methods=["GET", "POST"])
+def criar_conta():
+    # Se o utilizador já tem sessão iniciada, redireciona para o painel
+    if "utilizador_id" in session:
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        nome = request.form.get("nome", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        senha = request.form.get("senha", "")
+        confirmar_senha = request.form.get("confirmar_senha", "")
+
+        # 1. Validação de preenchimento dos campos
+        if not nome or not email or not senha:
+            flash("Por favor, preencha todos os campos obrigatórios.", "danger")
+            return render_template("criar_conta.html")
+
+        # 2. Validação de coincidência de palavras-passe
+        if senha != confirmar_senha:
+            flash("As palavras-passe introduzidas não coincidem.", "danger")
+            return render_template("criar_conta.html")
+
+        # 3. Validação de unicidade de e-mail na base de dados (1FN)
+        utilizador_existente = Utilizador.query.filter_by(email=email).first()
+        if utilizador_existente:
+            flash("Este e-mail já se encontra registado. Tente iniciar sessão.", "warning")
+            return render_template("criar_conta.html")
+
+        # 4. Criação do novo candidato com tipo obrigatoriamente restrito a 'candidato'
+        novo_candidato = Utilizador(
+            nome=nome,
+            email=email,
+            tipo="candidato"  # Regra de segurança: registos públicos nunca são admin
+        )
+        novo_candidato.definir_senha(senha)  # Hash encriptado conforme RNF04
+
+        db.session.add(novo_candidato)
+        db.session.commit()
+
+        # 5. Inicia sessão imediatamente após o registo com sucesso
+        session["utilizador_id"] = novo_candidato.id
+        session["utilizador_nome"] = novo_candidato.nome
+        session["utilizador_tipo"] = novo_candidato.tipo
+
+        flash(f"Conta criada com sucesso! Bem-vindo, {novo_candidato.nome}.", "success")
+        return redirect(url_for("dashboard"))
+
+    # Pedido GET normal: apresenta o formulário
+    return render_template("criar_conta.html")
 
 
 # ==============================================================================
