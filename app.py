@@ -31,6 +31,9 @@ from werkzeug.security import (  # Utilitários nativos para senhas seguras (RNF
 # Carrega o ficheiro .env local antes de iniciar as configurações
 load_dotenv()
 
+# Constante de segurança que define o único e-mail autorizado a deter privilégios administrativos
+EMAIL_ADMIN_OFICIAL = "admin@unibolsas.co.ao"
+
 # ==============================================================================
 # INICIALIZAÇÃO DA APLICAÇÃO WEB
 # ==============================================================================
@@ -101,6 +104,7 @@ class Utilizador(db.Model):
 
     pedidos_contacto = db.relationship("PedidoContacto", backref="candidato", lazy=True)
     contratacoes = db.relationship("ContratacaoMentoria", backref="candidato", lazy=True)
+    bolsas_guardadas = db.relationship("BolsaGuardada", backref="candidato", cascade="all, delete-orphan", lazy=True)
 
     def definir_senha(self, senha_limpa):
         self.senha_hash = generate_password_hash(senha_limpa)
@@ -132,6 +136,7 @@ class Bolsa(db.Model):
 
     itens_cobertos = db.relationship("BolsaItemCoberto", backref="bolsa", cascade="all, delete-orphan", lazy=True)
     bolseiros = db.relationship("BolseiroVoluntario", backref="bolsa_rel", lazy=True)
+    guardada_por = db.relationship("BolsaGuardada", backref="bolsa", cascade="all, delete-orphan", lazy=True)
 
 
 # 3. TABELA ASSOCIATIVA NORMALIZADA DE ITENS COBERTOS (Atende RF10 - 1FN e 2FN)
@@ -204,6 +209,19 @@ class ContratacaoMentoria(db.Model):
     data_contratacao = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 
+# 8. TABELA ASSOCIATIVA NORMALIZADA DE BOLSAS GUARDADAS / FAVORITAS (Atende RF11, UC06 - 1FN, 2FN e 3FN)
+class BolsaGuardada(db.Model):
+    __tablename__ = "bolsas_guardadas"
+
+    id = db.Column(db.Integer, primary_key=True)
+    candidato_id = db.Column(db.Integer, db.ForeignKey("utilizadores.id", ondelete="CASCADE"), nullable=False)
+    bolsa_id = db.Column(db.Integer, db.ForeignKey("bolsas.id", ondelete="CASCADE"), nullable=False)
+    criado_em = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    # Restrição de unicidade para evitar guardar a mesma bolsa repetidamente pelo mesmo utilizador
+    __table_args__ = (db.UniqueConstraint("candidato_id", "bolsa_id", name="uq_candidato_bolsa_guardada"),)
+
+
 # ==============================================================================
 # POVOAMENTO INICIAL DE DADOS DE TESTE (SEEDS)
 # ==============================================================================
@@ -215,13 +233,13 @@ def criar_dados_iniciais():
         if not admin_existente:
             novo_admin = Utilizador(
                 nome="Admin",
-                email="admin@unibolsas.ao",
+                email=EMAIL_ADMIN_OFICIAL,
                 tipo="admin"
             )
             novo_admin.definir_senha(os.getenv("ADMIN_SENHA", "1234"))  # pode mudar no .env
             db.session.add(novo_admin)
             db.session.commit()
-            print("Conta de Administrador criada com sucesso (admin@unibolsas.ao)!")
+            print(f"Conta de Administrador criada com sucesso ({EMAIL_ADMIN_OFICIAL})!")
 
         # 2. Criar bolseiros voluntários se a tabela estiver vazia
         if BolseiroVoluntario.query.count() == 0:
@@ -610,6 +628,17 @@ def dashboard():
         .all()
     )
 
+    # Bolsas GUARDADAS / FAVORITAS do candidato logado (Atende RF11, UC06)
+    registos_guardados = (
+        BolsaGuardada.query.filter_by(candidato_id=utilizador.id)
+        .order_by(BolsaGuardada.criado_em.desc())
+        .all()
+    )
+    # Extrai os objetos Bolsa das associações guardadas
+    minhas_bolsas_guardadas = [registo.bolsa for registo in registos_guardados if registo.bolsa]
+    # Lista de IDs de bolsas guardadas para destacar o botão no carrossel
+    ids_bolsas_guardadas = {registo.bolsa_id for registo in registos_guardados}
+
     return render_template(
         "dashboard_candidato.html",
         bolsas=bolsas_disponiveis,
@@ -618,10 +647,43 @@ def dashboard():
         nome_candidato=utilizador.nome,
         minhas_contratacoes=minhas_contratacoes,
         meus_pedidos=meus_pedidos,
+        minhas_bolsas_guardadas=minhas_bolsas_guardadas,
+        ids_bolsas_guardadas=ids_bolsas_guardadas,
     )
 
 
-# ROTA 7: PEDIR CONTACTO COM UM BOLSEIRO (Atende UC08 / RF17)
+# ROTA 7: GUARDAR OU REMOVER BOLSA DOS FAVORITOS (Atende UC06 / RF11)
+# O clique no botão marcador submete um POST alternando o estado de favorito
+@app.route("/guardar-bolsa/<int:bolsa_id>", methods=["POST"])
+@login_obrigatorio
+def guardar_bolsa(bolsa_id):
+    utilizador = utilizador_atual()
+
+    # 1. A bolsa tem de existir e estar ativa
+    bolsa = db.session.get(Bolsa, bolsa_id)
+    if bolsa is None or not bolsa.ativa:
+        flash("Bolsa não encontrada ou inativa.", "danger")
+        return redirect(url_for("dashboard"))
+
+    # 2. Verifica se a bolsa já está nos favoritos do candidato
+    guardada = BolsaGuardada.query.filter_by(candidato_id=utilizador.id, bolsa_id=bolsa.id).first()
+
+    if guardada:
+        # Se já estava guardada, remove dos favoritos (toggle)
+        db.session.delete(guardada)
+        db.session.commit()
+        flash(f'Bolsa "{bolsa.titulo}" removida dos teus favoritos.', "info")
+    else:
+        # Se não estava guardada, adiciona à tabela associativa
+        novo_favorito = BolsaGuardada(candidato_id=utilizador.id, bolsa_id=bolsa.id)
+        db.session.add(novo_favorito)
+        db.session.commit()
+        flash(f'Bolsa "{bolsa.titulo}" guardada com sucesso nos teus favoritos!', "success")
+
+    return redirect(url_for("dashboard") + "#guardadas")
+
+
+# ROTA 8: PEDIR CONTACTO COM UM BOLSEIRO (Atende UC08 / RF17)
 # O botão "Conversar com Bolseiro" envia um formulário POST para /pedir-contacto/<id do bolseiro>
 # Campo opcional do formulário: "pergunta"
 @app.route("/pedir-contacto/<int:bolseiro_id>", methods=["POST"])
@@ -660,7 +722,7 @@ def pedir_contacto(bolseiro_id):
     return redirect(url_for("dashboard") + "#bolseiros-comunidade")
 
 
-# ROTA 8: CONTRATAR UMA MENTORIA (Atende UC12 / RF21)
+# ROTA 9: CONTRATAR UMA MENTORIA (Atende UC12 / RF21)
 # O botão "Solicitar" envia um formulário POST para /contratar-mentoria/<id da mentoria>
 # Campo opcional do formulário: "data_preferida"
 @app.route("/contratar-mentoria/<int:mentoria_id>", methods=["POST"])
@@ -699,7 +761,7 @@ def contratar_mentoria(mentoria_id):
     return redirect(url_for("dashboard") + "#mentores-tecnicos")
 
 
-# ROTA 9: PAGAMENTO SIMULADO DA MENTORIA (Atende UC12 / RF22)
+# ROTA 10: PAGAMENTO SIMULADO DA MENTORIA (Atende UC12 / RF22)
 # Não há dinheiro real: apenas muda o estado de "Pendente" para "Pago"
 @app.route("/pagar-mentoria/<int:contratacao_id>", methods=["POST"])
 @login_obrigatorio
@@ -733,13 +795,13 @@ def pagar_mentoria(contratacao_id):
 #   python app.py contas testar EMAIL SENHA
 #       Diz se o login com esse e-mail e senha funcionaria e, se não, porquê. Não altera nada.
 #
-#   python app.py contas definir EMAIL SENHA [--nome "Nome"] [--tipo admin|candidato]
-#       Cria a conta (se não existir) ou muda-lhe a senha, já encriptada.
+#   python app.py contas definir EMAIL SENHA [--nome "Nome"]
+#       Cria a conta de candidato (se não existir) ou altera a senha de forma segura.
 # ==============================================================================
 AJUDA_CONTAS = """Comandos disponíveis:
   python app.py contas listar
   python app.py contas testar EMAIL SENHA
-  python app.py contas definir EMAIL SENHA [--nome "Nome"] [--tipo admin|candidato]"""
+  python app.py contas definir EMAIL SENHA [--nome "Nome"]"""
 
 
 def estado_da_senha(utilizador):
@@ -788,22 +850,33 @@ def testar_login(email, senha):
         print("Dica: use 'definir' para guardar a senha certa.")
 
 
-def definir_conta(email, senha, nome=None, tipo=None):
+def definir_conta(email, senha, nome=None):
     email = email.strip().lower()
     if len(senha) < 4:
         print("A senha é demasiado curta.")
         return
+
     utilizador = buscar_utilizador_por_email(email)
+    
+    # REGRA DE SEGURANÇA: Apenas o e-mail oficial pode deter privilégios de administrador
+    tipo_atribuido = "admin" if email == EMAIL_ADMIN_OFICIAL else "candidato"
+
     if utilizador is None:
-        utilizador = Utilizador(nome=nome or email.split("@")[0], email=email, tipo=tipo or "candidato")
+        utilizador = Utilizador(
+            nome=nome or email.split("@")[0], 
+            email=email, 
+            tipo=tipo_atribuido
+        )
         db.session.add(utilizador)
         acao = "CRIADA"
     else:
         if nome:
             utilizador.nome = nome
-        if tipo:
-            utilizador.tipo = tipo
+        # Não permite que contas normais alterem o seu tipo para admin
+        if utilizador.email != EMAIL_ADMIN_OFICIAL:
+            utilizador.tipo = "candidato"
         acao = "ATUALIZADA"
+
     utilizador.email = email  # guarda sempre em minúsculas e sem espaços
     utilizador.definir_senha(senha)
     db.session.commit()
@@ -831,15 +904,12 @@ def executar_comando_contas(args):
             elif comando == "testar" and len(args) >= 3:
                 testar_login(args[1], args[2])
             elif comando == "definir" and len(args) >= 3:
-                tipo = valor_da_opcao(args, "--tipo")
-                if tipo not in (None, "admin", "candidato"):
-                    print("--tipo tem de ser 'admin' ou 'candidato'.")
-                    return
-                definir_conta(args[1], args[2], valor_da_opcao(args, "--nome"), tipo)
+                # Blindagem: Não aceita mais o argumento --tipo. A regra é estritamente automática
+                definir_conta(args[1], args[2], valor_da_opcao(args, "--nome"))
             else:
                 print(AJUDA_CONTAS)
     except Exception as erro:  # ex.: sem internet ou .env em falta
-        print("Não foi possível falar com a base de dados: %s" % erro)
+        print("Não foi possível conectar com a base de dados: %s" % erro)
 
 
 # ==============================================================================
