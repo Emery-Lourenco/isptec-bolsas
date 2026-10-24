@@ -173,11 +173,14 @@
     <main class="container my-5" id="bolsas-destaque">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between align-items-center border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0 fs-4">Bolsas em Destaque</h3>
-            <span class="badge bg-dark rounded-pill px-3 py-2">{{ bolsas|length }} bolsas ativas</span>
+              <a href="#" class="btn btn-dark btn-sm rounded-pill px-3">
+                Ver Todas <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+            
         </div>
 
                       <!-- Contentor com scroll  -->
-        <div class="scroll-horizontal gap-4 px-1">
+        <div class="scroll-horizontal gap-4 px-1" style="scroll-snap-type: x mandatory; scrollbar-width: thin;">
             {% for b in bolsas %}
             <div class="scroll-item-card">
                 <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white position-relative">
@@ -270,6 +273,9 @@
     <section class="container my-5" id="mentores-tecnicos">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between align-items-center border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0 fs-4">Mentores Técnicos Especiais</h3>
+              <a href="#" class="btn btn-dark btn-sm rounded-pill px-3">
+                Ver Todas <i class="bi bi-arrow-right ms-1"></i>
+            </a>
         </div>
 
         <div class="scroll-horizontal gap-4 px-1">
@@ -301,6 +307,9 @@
     <section class="container my-5" id="bolseiros-comunidade">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between align-items-center border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0 fs-4">Bolseiros (Apoio Comunitário)</h3>
+              <a href="#" class="btn btn-dark btn-sm rounded-pill px-3">
+                Ver Todas <i class="bi bi-arrow-right ms-1"></i>
+            </a>
         </div>
 
         <div class="scroll-horizontal gap-4 px-1">

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Administrador | UniBoLSas</title>
+    
+    <!-- CSS do Bootstrap 5 via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Ícones do Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        /* Sidebar colado à borda esquerda (0px), mas com margem no topo/fundo e cantos arredondados só à direita */
+        .admin-sidebar {
+            width: 260px;
+            background-color: #212529;
+            color: #fff;
+            flex-shrink: 0;
+            border-radius: 0 1rem 1rem 0;
+            margin: 20px 0 20px 0;
+            min-height: calc(100vh - 100px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+            transition: all 0.3s ease;
+        }
+
+        .admin-sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.75);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin: 4px 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .admin-sidebar .nav-link:hover,
+        .admin-sidebar .nav-link.active {
+            color: #fff;
+            background-color: #0d6efd;
+        }
+
+        .admin-sidebar .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        /* Área de conteúdo principal */
+        .admin-content {
+            flex-grow: 1;
+            padding: 25px 30px;
+            overflow-y: auto;
+        }
+
+        /* Ocultar conteúdo das secções para simular navegação na mesma página */
+        .admin-section {
+            display: none;
+        }
+        .admin-section.active-section {
+            display: block;
+        }
+
+        @media (max-width: 991.98px) {
+            .admin-sidebar {
+                position: fixed;
+                top: 70px;
+                left: -280px;
+                z-index: 1040;
+                margin: 0;
+                height: calc(100vh - 70px);
+                border-radius: 0 1rem 1rem 0;
+            }
+            .admin-sidebar.show {
+                left: 0;
+            }
+            .admin-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-secondary-subtle">
+
+    <!-- 1. BARRA DE NAVEGAÇÃO-->
+    <nav class="navbar navbar-dark bg-dark sticky-top shadow px-2 px-md-4">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            
+            <!-- Logótipo UniBoLSas + Botão de alternar Sidebar -->
+            <div class="d-flex align-items-center gap-2">
+                <a class="navbar-brand fw-bold text-primary m-0" href="#">
+                    <i class="bi bi-mortarboard-fill me-1"></i>Uni<span class="text-white">BoLSas</span>
+                </a>
+
+                <!-- Botão de controlo da sidebar-->
+                <button class="btn btn-outline-light btn-sm d-lg-none ms-2" type="button" onclick="toggleSidebar()" title="Menu Lateral">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+            </div>
+
+            <!-- notificações e perfil do Admin-->
+            <div class="d-flex align-items-center gap-3">
+
+                <!-- Notificações -->
+                <div class="dropdown">
+                    <a class="nav-link text-white position-relative p-1" href="#" id="notifDropdown" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                            <span class="visually-hidden">Novas notificações</span>
+                        </span>
+                    </a>
+                   <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 p-2" style="width: 280px;">
+                    <li><h6 class="dropdown-header fw-bold text-dark">Notificações</h6></li>
+                     <!--        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item small text-wrap" href="#">⚠️ 3 bolsas expiram nos próximos 7 dias.</a></li>
+                        <li><a class="dropdown-item small text-wrap" href="#">👤 Novo mentor técnico registado para aprovação.</a></li>
+                    </ul>-->
+                </div> 
+
+         <!-- Perfil do administrador -->
+                <div class="dropdown">
+                    <a class="btn btn-outline-light rounded-pill dropdown-toggle d-flex align-items-center gap-2 px-2 px-md-3 py-1" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle fs-5 text-primary"></i>
+                        <span class="d-none d-sm-inline">Admin</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Definições</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="/"><i class="bi bi-box-arrow-right me-2"></i>Terminar Sessão</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- ESTRUTURA PRINCIPAL do SIDEBAR e CONTEÚDO -->
+    <div class="d-flex">
+
+        <!-- Sidebar  -->
+        <aside class="admin-sidebar py-4 shadow-sm" id="adminSidebar">
+            <div class="px-4 mb-3 text-uppercase text-muted fw-bold extra-small" style="font-size: 0.7rem; letter-spacing: 1px;">
+                Navegação Admin
+            </div>
+            
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="#" onclick="switchSection('dashboard', this)">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+
+
+                <a class="nav-link" href="#" onclick="switchSection('bolsas', this)">
+                    <i class="bi bi-journal-bookmark-fill"></i> Gerir Bolsas
+                </a>
+                <a class="nav-link" href="#" onclick="switchSection('mentores', this)">
+                    <i class="bi bi-person-badge-fill"></i> Mentores Técnicos
+                </a>
+                <a class="nav-link" href="#" onclick="switchSection('bolseiros', this)">
+                    <i class="bi bi-people-fill"></i> Bolseiros Comunidade
+                </a>
+            </nav>
+
+            <hr class="border-secondary my-4 mx-3">
+
+            <div class="px-4">
+                <a href="index.html" class="btn btn-outline-light btn-sm w-100 rounded-pill py-2">
+                    <i class="bi bi-arrow-left me-1"></i> Ver Página Principal
+                </a>
+            </div>
+        </aside>
+
+<!-- ÁREA de conteudo -->
+        <main class="admin-content">
+
+                   <!-- SECÇÃO DASHBOARD -->
+            <div id="section-dashboard" class="admin-section active-section">
+                <div style="background: #9299a0;" class="p-3 rounded-3 mb-4 shadow-sm">
+                    <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-speedometer2 me-2"></i>Painel Administrativo</h3>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold">Total de Bolsas Ativas</span>
+                                    <h2 class="fw-bold text-dark mb-0 mt-1">12</h2>
+                                </div>
+                                <div class="p-3 bg-primary-subtle text-primary rounded-circle">
+                                    <i class="bi bi-journal-check fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+             <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold">Bolsas a Expirar</span>
+                                    <h2 class="fw-bold text-dark mb-0 mt-1">3</h2>
+                                </div>
+                                <div class="p-3 bg-warning-subtle text-warning-emphasis rounded-circle">
+                                    <i class="bi bi-clock-history fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold">Mentores Ativos</span>
+                                    <h2 class="fw-bold text-dark mb-0 mt-1">8</h2>
+                                </div>
+                                <div class="p-3 bg-info-subtle text-info rounded-circle">
+                                    <i class="bi bi-person-badge fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold">Candidatos Registados</span>
+                                    <h2 class="fw-bold text-dark mb-0 mt-1">145</h2>
+                                </div>
+                                <div class="p-3 bg-success-subtle text-success rounded-circle">
+                                    <i class="bi bi-people fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                
+
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <h5 class="fw-bold text-dark mb-3">Actividade Recente do Sistema</h5>
+                    <ul class="list-group list-group-flush small text-secondary">
+                        <li class="list-group-item px-0 py-2 d-flex justify-content-between">
+                            <span>Nova bolsa cadastrada: <strong>Bolsa Nacional de Mérito</strong></span>
+                            <span class="text-muted">Há 2 horas</span>
+                        </li>
+                        <li class="list-group-item px-0 py-2 d-flex justify-content-between">
+                            <span>Utilizador registado: <strong>Mário Silva</strong></span>
+                            <span class="text-muted">Há 5 horas</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+ <!-- SECÇÃO Gerir bolsas -->
+            <div id="section-bolsas" class="admin-section">
+                <div style="background: #9299a0;" class="d-flex justify-content-between align-items-center p-3 rounded-3 mb-4 shadow-sm flex-wrap gap-2">
+                    <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-journal-bookmark-fill me-2"></i>Gestão de Bolsas de Estudo</h3>
+                    <button class="btn btn-dark btn-sm rounded-pill px-3 fw-bold" data-bs-toggle="modal" data-bs-target="#modalCadastrarBolsa">
+                        <i class="bi bi-plus-lg me-1"></i> Cadastrar Nova Bolsa
+                    </button>
+
+                </div>
+
+                         <!-- Barra de Pesquisa e Filtros -->
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control bg-light border-start-0" placeholder="Pesquisar por título, entidade ou país...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select bg-light">
+                                <option value="" selected>Filtrar por nível...</option>
+                                <option value="Licenciatura">Licenciatura</option>
+                                <option value="Mestrado">Mestrado</option>
+                                <option value="Doutoramento">Doutoramento</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+       <!-- Tabela de Bolsas -->
+
+
+                <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Título da Bolsa</th>
+                                    <th>Entidade / País</th>
+                                    <th>Nível</th>
+                                    <th>Prazo Final</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong class="text-dark">Bolsa Nacional de Mérito</strong><br>
+                                        <small class="text-muted">Engenharia e Tecnologia</small>
+                                    </td>
+                                    <td>INAGBE (Angola)</td>
+                                    <td>Licenciatura</td>
+                                    <td>30/09/2026</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-outline-primary btn-sm rounded-circle me-1" title="Editar" data-bs-toggle="modal" data-bs-target="#modalCadastrarBolsa">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm rounded-circle" title="Eliminar" onclick="confirm('Eliminar esta bolsa?')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong class="text-dark">Programa Cooperação Luso-Angolana</strong><br>
+                                        <small class="text-muted">Tecnologia</small>
+                                    </td>
+                                    <td>Univ. de Lisboa (Portugal)</td>
+                                    <td>Mestrado</td>
+                                    <td>15/10/2026</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-outline-primary btn-sm rounded-circle me-1" title="Editar" data-bs-toggle="modal" data-bs-target="#modalCadastrarBolsa">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm rounded-circle" title="Eliminar" onclick="confirm('Eliminar esta bolsa?')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginação -->
+
+
+                    <nav class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top flex-wrap gap-2">
+                        <span class="text-muted small">A mostrar 2 de 12 registos</span>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Seguinte</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+
+
+            <!-- SECÇÃO Mentores -->
+            <div id="section-mentores" class="admin-section">
+                <div style="background: #9299a0;" class="p-3 rounded-3 mb-4 shadow-sm">
+                    <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-person-badge-fill me-2"></i>Gestão de Mentores Técnicos</h3>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <p class="text-muted mb-0">Nenhum mentor pendente de aprovação neste momento.</p>
+                </div>
+
+
+            </div>
+
+    <!-- SECÇÃO BOLSEIROS -->
+            <div id="section-bolseiros" class="admin-section">
+                <div style="background: #9299a0;" class="p-3 rounded-3 mb-4 shadow-sm">
+                    <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-people-fill me-2"></i>Bolseiros no Estrangeiro</h3>
+                </div>
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <p class="text-muted mb-0">Listagem de bolseiros ativos na comunidade.</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- 
+     MODAL PARA CADASTRAR ou editar bolsa -->
+    <div class="modal fade" id="modalCadastrarBolsa" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-plus-circle me-2"></i>Cadastrar Nova Bolsa de Estudo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form action="/admin/cadastrar-bolsa" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label class="form-label small fw-bold">Título da Bolsa</label>
+                                <input type="text" class="form-control" name="titulo" placeholder="ex: Bolsa Nacional de Mérito" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Entidade Promotora</label>
+                                <input type="text" class="form-control" name="entidade" placeholder="ex: INAGBE" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">País de Destino</label>
+                                <input type="text" class="form-control" name="pais_destino" placeholder="ex: Angola, Portugal, Brasil" required>
+                            </div>
+                            <div class="col-md-4">
+
+                                <label class="form-label small fw-bold">Área de Estudo</label>
+                                <select class="form-select" name="area_estudo" required>
+                                    <option value="" selected disabled>Selecione a área...</option>
+                                    <option value="Engenharia e Tecnologia">Engenharia e Tecnologia</option>
+                                    <option value="Ciências Sociais">Ciências Sociais</option>
+                                    <option value="Saúde e Medicina">Saúde e Medicina</option>
+                                    <option value="Geral">Geral / Todas</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Nível de Estudo</label>
+                                <select class="form-select" name="nivel_estudo" required>
+                                    <option value="" selected disabled>Selecione o nível...</option>
+                                    <option value="Licenciatura">Licenciatura</option>
+                                    <option value="Mestrado">Mestrado</option>
+                                    <option value="Doutoramento">Doutoramento</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Tipo de Cobertura</label>
+                                <select class="form-select" name="cobertura" required>
+                                    <option value="integral">100% Integral</option>
+                                    <option value="parcial">Parcial</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Prazo Limite</label>
+                                <input type="date" class="form-control" name="data_limite" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Link Oficial</label>
+                                <input type="url" class="form-control" name="link_oficial" placeholder="https://..." required>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Resumo dos Benefícios</label>
+                                <input type="text" class="form-control" name="beneficio_resumo" placeholder="ex: Propinas integrais + subsídio" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Descrição Completa</label>
+                                <textarea class="form-control" name="descricao" rows="3" placeholder="Requisitos e elegibilidade..." required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">Guardar Bolsa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function switchSection(sectionId, el) {
+            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active-section'));
+            document.querySelectorAll('.admin-sidebar .nav-link').forEach(link => link.classList.remove('active'));
+
+            document.getElementById('section-' + sectionId).classList.add('active-section');
+            el.classList.add('active');
+
+            document.getElementById('adminSidebar').classList.remove('show');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('adminSidebar').classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

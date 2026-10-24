@@ -342,7 +342,7 @@ def chatbot_responder():
 
 
 # ROTA 3: PAINEL EXCLUSIVO DO CANDIDATO (Atende UC14, UC28 / RF23, RF44)
-@app.route("/dashboard")
+@app.route("/dashboard_candidato")
 def dashboard():
     # Obtém todas as bolsas ativas da base de dados PostgreSQL
     bolsas_disponiveis = Bolsa.query.filter_by(ativa=True).order_by(Bolsa.id.desc()).all()
