@@ -1,0 +1,102 @@
+@startuml
+left to right direction
+actor Visitante
+actor Candidato
+actor Administrador
+actor Mentor
+actor Bolseiro
+actor Chatbot
+actor "Sistema de notificações" as Notif
+
+Candidato --|> Visitante
+
+rectangle "Plataforma de Bolsas para Angolanos" {
+  usecase "UC01 Registar-se" as UC01
+  usecase "UC02 Autenticar-se" as UC02
+  usecase "UC03 Pesquisar e filtrar bolsas" as UC03
+  usecase "UC04 Ver detalhes da bolsa" as UC04
+  usecase "UC05 Candidatar-se a bolsa" as UC05
+  usecase "UC06 Guardar bolsa favorita" as UC06
+  usecase "UC07 Gerir perfil" as UC07
+  usecase "UC08 Gerir bolsas" as UC08
+  usecase "UC09 Gerir utilizadores" as UC09
+  usecase "UC10 Receber alertas de prazo" as UC10
+  usecase "UC11 Consultar guias de mentoria" as UC11
+  usecase "UC12 Pedir ajuda a um mentor" as UC12
+  usecase "UC13 Responder pedido de ajuda" as UC13
+  usecase "UC14 Gerir guias de mentoria" as UC14
+  usecase "UC15 Gerir mentores" as UC15
+  usecase "UC16 Gerir checklist de documentos" as UC16
+  usecase "UC17 Explorar comunidade de bolseiros" as UC17
+  usecase "UC18 Perguntar a um bolseiro" as UC18
+  usecase "UC19 Responder a candidato" as UC19
+  usecase "UC20 Gerir perfil e relatos de bolseiro" as UC20
+  usecase "UC21 Pedir verificação como bolseiro" as UC21
+  usecase "UC22 Verificar bolseiros" as UC22
+  usecase "UC23 Denunciar e moderar conteúdo" as UC23
+  usecase "UC24 Consultar catálogo de mentorias" as UC24
+  usecase "UC25 Contratar mentoria (pagamento simulado)" as UC25
+  usecase "UC26 Gerir catálogo de mentorias" as UC26
+  usecase "UC27 Conversar com o chatbot" as UC27
+  usecase "UC28 Consultar mentorias contratadas" as UC28
+  usecase "UC29 Pedir contacto com um bolseiro" as UC29
+  usecase "UC30 Gerir bolseiros voluntários" as UC30
+  usecase "UC31 Tratar pedidos de contacto" as UC31
+}
+
+Visitante --> UC01
+Visitante --> UC03
+Visitante --> UC04
+Candidato --> UC02
+Candidato --> UC05
+Candidato --> UC06
+Candidato --> UC07
+Administrador --> UC02
+Administrador --> UC08
+Administrador --> UC09
+Notif --> UC10
+Visitante --> UC11
+Candidato --> UC12
+Candidato --> UC16
+Mentor --> UC13
+Mentor --> UC14
+Administrador --> UC14
+Administrador --> UC15
+Mentor --> UC02
+Visitante --> UC17
+Candidato --> UC18
+Candidato --> UC21
+Candidato --> UC23
+Bolseiro --> UC02
+Bolseiro --> UC19
+Bolseiro --> UC20
+Administrador --> UC22
+Administrador --> UC23
+Visitante --> UC24
+Candidato --> UC25
+Administrador --> UC26
+Visitante --> UC27
+Chatbot --> UC27
+Candidato --> UC28
+Administrador --> UC28
+
+UC05 .> UC02 : <<include>>
+UC06 .> UC02 : <<include>>
+UC07 .> UC02 : <<include>>
+UC05 .> UC04 : <<include>>
+UC12 .> UC02 : <<include>>
+UC16 .> UC02 : <<include>>
+UC13 .> UC02 : <<include>>
+UC12 ..> UC11 : <<extend>>
+UC18 .> UC02 : <<include>>
+UC19 .> UC02 : <<include>>
+UC20 .> UC02 : <<include>>
+UC21 .> UC02 : <<include>>
+UC23 .> UC02 : <<include>>
+UC25 .> UC02 : <<include>>
+UC28 .> UC02 : <<include>>
+Candidato --> UC29
+Administrador --> UC30
+Administrador --> UC31
+UC29 .> UC02 : <<include>>
+@enduml

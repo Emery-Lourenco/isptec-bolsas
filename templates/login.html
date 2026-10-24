@@ -42,16 +42,28 @@
                  
                     
 
+                    <!-- Mensagens Flash de Alerta do Backend Flask -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show rounded-3 small py-2" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
                     <div class="tab-content" id="authTabContent">
                         
                         <!-- Painel de Login -->
                         <div class="tab-pane fade show active" id="login-panel" role="tabpanel">
-                            <form action="/dashboard.html">
+                            <form action="/login" method="POST">
                                 <div class="mb-3">
                                     <label class="form-label text-dark small fw-bold">Email Institucional ou Pessoal</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light"><i class="bi bi-envelope text-muted"></i></span>
-                                        <input type="email" class="form-control" placeholder="fulano@gmail.com" required>
+                                        <input type="email" name="email" class="form-control" placeholder="fulano@gmail.com" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -60,7 +72,7 @@
                                                                             </div>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light"><i class="bi bi-lock text-muted"></i></span>
-                                        <input type="password" class="form-control" placeholder="••••••••" required>
+                                        <input type="password" name="senha" class="form-control" placeholder="••••••••" required>
                                     </div>
                                 </div>
                                 <div class=" mb-3">
