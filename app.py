@@ -21,8 +21,11 @@ from flask import (
 )
 
 from flask_sqlalchemy import SQLAlchemy  # A ferramenta (ORM) que faz a ponte entre Python e o PostgreSQL
+<<<<<<< HEAD
 from sqlalchemy import func  # Funções SQL (lower/trim) para comparar e-mails sem diferenças de maiúsculas
 from sqlalchemy.exc import IntegrityError  # Erro lançado quando a BD recusa um dado repetido (ex.: e-mail)
+=======
+>>>>>>> origin/main
 from werkzeug.security import (  # Utilitários nativos para senhas seguras (RNF04)
     check_password_hash,
     generate_password_hash,
@@ -31,14 +34,18 @@ from werkzeug.security import (  # Utilitários nativos para senhas seguras (RNF
 # Carrega o ficheiro .env local antes de iniciar as configurações
 load_dotenv()
 
+<<<<<<< HEAD
 # Constante de segurança que define o único e-mail autorizado a deter privilégios administrativos
 EMAIL_ADMIN_OFICIAL = "admin@unibolsas.co.ao"
 
+=======
+>>>>>>> origin/main
 # ==============================================================================
 # INICIALIZAÇÃO DA APLICAÇÃO WEB
 # ==============================================================================
 app = Flask(__name__)
 
+<<<<<<< HEAD
 
 @app.after_request
 def impedir_cache_de_paginas_de_sessao(resposta):
@@ -54,10 +61,19 @@ app.config["SECRET_KEY"] = os.getenv(
     "SECRET_KEY", "chave_secreta_mvp_isptec_2026"
 )
 
+=======
+# CHAVE SECRETA DA SESSÃO:
+# O Flask precisa de uma chave para encriptar os cookies de sessão no browser do utilizador.
+app.config["SECRET_KEY"] = os.getenv(
+    "SECRET_KEY", "chave_secreta_mvp_isptec_2026"
+)
+
+>>>>>>> origin/main
 # ==============================================================================
 # CONFIGURAÇÃO DA BASE DE DADOS (POSTGRESQL)
 # ==============================================================================
 # Lê a string de conexão remota definida no ficheiro .env para proteger as credenciais
+<<<<<<< HEAD
 def ler_url_da_base_de_dados():
     """Lê o DATABASE_URL do .env e corrige os erros mais comuns antes de ligar."""
     url = os.getenv("DATABASE_URL")
@@ -80,6 +96,9 @@ def ler_url_da_base_de_dados():
 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = ler_url_da_base_de_dados()
+=======
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+>>>>>>> origin/main
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Liga a extensão SQLAlchemy à nossa aplicação Flask
@@ -104,7 +123,10 @@ class Utilizador(db.Model):
 
     pedidos_contacto = db.relationship("PedidoContacto", backref="candidato", lazy=True)
     contratacoes = db.relationship("ContratacaoMentoria", backref="candidato", lazy=True)
+<<<<<<< HEAD
     bolsas_guardadas = db.relationship("BolsaGuardada", backref="candidato", cascade="all, delete-orphan", lazy=True)
+=======
+>>>>>>> origin/main
 
     def definir_senha(self, senha_limpa):
         self.senha_hash = generate_password_hash(senha_limpa)
@@ -136,7 +158,10 @@ class Bolsa(db.Model):
 
     itens_cobertos = db.relationship("BolsaItemCoberto", backref="bolsa", cascade="all, delete-orphan", lazy=True)
     bolseiros = db.relationship("BolseiroVoluntario", backref="bolsa_rel", lazy=True)
+<<<<<<< HEAD
     guardada_por = db.relationship("BolsaGuardada", backref="bolsa", cascade="all, delete-orphan", lazy=True)
+=======
+>>>>>>> origin/main
 
 
 # 3. TABELA ASSOCIATIVA NORMALIZADA DE ITENS COBERTOS (Atende RF10 - 1FN e 2FN)
@@ -209,6 +234,7 @@ class ContratacaoMentoria(db.Model):
     data_contratacao = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 
+<<<<<<< HEAD
 # 8. TABELA ASSOCIATIVA NORMALIZADA DE BOLSAS GUARDADAS / FAVORITAS (Atende RF11, UC06 - 1FN, 2FN e 3FN)
 class BolsaGuardada(db.Model):
     __tablename__ = "bolsas_guardadas"
@@ -222,12 +248,15 @@ class BolsaGuardada(db.Model):
     __table_args__ = (db.UniqueConstraint("candidato_id", "bolsa_id", name="uq_candidato_bolsa_guardada"),)
 
 
+=======
+>>>>>>> origin/main
 # ==============================================================================
 # POVOAMENTO INICIAL DE DADOS DE TESTE (SEEDS)
 # ==============================================================================
 def criar_dados_iniciais():
     """Garante a existência de dados mínimos reais para demonstração do MVP."""
     try:
+<<<<<<< HEAD
         # 1. Criar o Administrador Inicial único caso não exista
         admin_existente = Utilizador.query.filter_by(tipo="admin").first()
         if not admin_existente:
@@ -242,6 +271,9 @@ def criar_dados_iniciais():
             print(f"Conta de Administrador criada com sucesso ({EMAIL_ADMIN_OFICIAL})!")
 
         # 2. Criar bolseiros voluntários se a tabela estiver vazia
+=======
+        # Criar bolseiros voluntários se a tabela estiver vazia
+>>>>>>> origin/main
         if BolseiroVoluntario.query.count() == 0:
             bolseiros_iniciais = [
                 BolseiroVoluntario(
@@ -287,7 +319,11 @@ def criar_dados_iniciais():
             db.session.bulk_save_objects(bolseiros_iniciais)
             db.session.commit()
 
+<<<<<<< HEAD
         # 3. Criar catálogo de mentorias se estiver vazio
+=======
+        # Criar catálogo de mentorias se estiver vazio
+>>>>>>> origin/main
         if Mentoria.query.count() == 0:
             mentorias_iniciais = [
                 Mentoria(
@@ -313,6 +349,7 @@ def criar_dados_iniciais():
 
 
 # ==============================================================================
+<<<<<<< HEAD
 # FUNÇÕES AUXILIARES DE SESSÃO (pequenas e reutilizadas por várias rotas)
 # ==============================================================================
 def utilizador_atual():
@@ -387,6 +424,8 @@ def login_obrigatorio(funcao):
 
 
 # ==============================================================================
+=======
+>>>>>>> origin/main
 # ROTAS E LÓGICA DE NEGÓCIO (ENDPOINTS)
 # ==============================================================================
 
@@ -401,6 +440,7 @@ def index():
 
     # Inicia a query base (apenas bolsas ativas e elegíveis para angolanos)
     query = Bolsa.query.filter_by(ativa=True, elegivel_angolanos=True)
+<<<<<<< HEAD
 
     # Aplicação incremental de filtros
     if termo_pesquisa:
@@ -910,17 +950,100 @@ def executar_comando_contas(args):
                 print(AJUDA_CONTAS)
     except Exception as erro:  # ex.: sem internet ou .env em falta
         print("Não foi possível conectar com a base de dados: %s" % erro)
+=======
+
+    # Aplicação incremental de filtros
+    if termo_pesquisa:
+        termo = f"%{termo_pesquisa}%"
+        query = query.filter(
+            (Bolsa.titulo.ilike(termo))
+            | (Bolsa.descricao.ilike(termo))
+            | (Bolsa.entidade.ilike(termo))
+            | (Bolsa.area_estudo.ilike(termo))
+        )
+
+    if filtro_pais and filtro_pais != "Todos os Países":
+        query = query.filter(Bolsa.pais_destino.ilike(filtro_pais))
+
+    if filtro_nivel and filtro_nivel != "Todos os Níveis":
+        query = query.filter(Bolsa.nivel_estudo.ilike(filtro_nivel))
+
+    # Executa a consulta
+    bolsas_disponiveis = query.order_by(Bolsa.id.desc()).all()
+
+    # Carrega bolseiros voluntários verificados para a secção de comunidade
+    bolseiros_destaque = BolseiroVoluntario.query.filter_by(verificado=True).limit(6).all()
+
+    # Carrega o catálogo de mentorias ativas
+    mentorias_catalogo = Mentoria.query.filter_by(ativa=True).all()
+
+    return render_template(
+        "index.html",
+        bolsas=bolsas_disponiveis,
+        bolseiros=bolseiros_destaque,
+        mentorias=mentorias_catalogo,
+        termo_pesquisa=termo_pesquisa,
+        filtro_pais=filtro_pais,
+        filtro_nivel=filtro_nivel,
+    )
+
+
+# ROTA 2: API DO CHATBOT REGRA/PALAVRAS-CHAVE (Atende UC15 / RF24, RF25)
+@app.route("/api/chatbot", methods=["POST"])
+def chatbot_responder():
+    dados = request.get_json() or {}
+    mensagem = dados.get("mensagem", "").strip().lower()
+
+    if not mensagem:
+        return jsonify({"resposta": "Por favor, escreve uma pergunta para que te possa ajudar."})
+
+    # Regra 1: Dúvidas sobre bolsas integrais / 100% comparticipadas
+    if "integral" in mensagem or "100%" in mensagem or "comparticipada" in mensagem or "integrais" in mensagem:
+        total_integrais = Bolsa.query.filter_by(ativa=True, cobertura="integral").count()
+        return jsonify({
+            "resposta": f"Atualmente temos {total_integrais} bolsa(s) 100% comparticipada(s) no portal. As bolsas integrais cobrem propinas e alojamento sem custos diretos para ti."
+        })
+
+    # Regra 2: Dúvidas sobre preços ou contratação de mentorias
+    elif "mentoria" in mensagem or "preço" in mensagem or "custo" in mensagem or "valor" in mensagem:
+        mentorias = Mentoria.query.filter_by(ativa=True).all()
+        lista_mentorias = ", ".join([f"{m.titulo} ({int(m.preco_kz):,} Kz)".replace(",", ".") for m in mentorias])
+        return jsonify({
+            "resposta": f"Oferecemos mentorias pagas para apoiar a tua candidatura: {lista_mentorias}. Podes agendar na secção Mentorias."
+        })
+
+    # Regra 3: Dúvidas sobre o INAGBE ou bolsas internas em Angola
+    elif "inagbe" in mensagem or "angola" in mensagem or "interna" in mensagem:
+        total_internas = Bolsa.query.filter_by(ativa=True, tipo="interna").count()
+        return jsonify({
+            "resposta": f"Temos {total_internas} bolsa(s) internas em Angola. Podes consultar os requisitos e prazos diretamente no nosso catálogo com o filtro de país 'Angola'."
+        })
+
+    # Regra 4: Dúvidas sobre documentos ou requisitos
+    elif "documento" in mensagem or "requisito" in mensagem or "papel" in mensagem:
+        return jsonify({
+            "resposta": "Os documentos habituais incluem: Certificado de Habilitações autenticado, Cópia do BI, Carta de Motivação e Carta de Recomendação. Cada bolsa detalha os seus requisitos no respetivo cartão."
+        })
+
+    # Resposta padrão orientadora
+    return jsonify({
+        "resposta": "Sou o UniX! Podes perguntar-me sobre 'bolsas integrais', 'mentorias e preços', 'bolsas do INAGBE' ou 'documentos necessários'."
+    })
+>>>>>>> origin/main
 
 
 # ==============================================================================
 # BLOCO DE EXECUÇÃO LOCAL E CRIAÇÃO DAS TABELAS
 # ==============================================================================
 if __name__ == "__main__":
+<<<<<<< HEAD
     # Modo ferramenta de contas: "python app.py contas listar" (não arranca o site)
     if len(sys.argv) > 1 and sys.argv[1] == "contas":
         executar_comando_contas(sys.argv[2:])
         sys.exit(0)
 
+=======
+>>>>>>> origin/main
     with app.app_context():
         print("A sincronizar modelos normalizados com a nuvem (Neon)...")
         db.create_all()
