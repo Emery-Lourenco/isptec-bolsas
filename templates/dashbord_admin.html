@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Administrador | UniBoLSas</title>
+    
+    <!-- CSS do Bootstrap 5 via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Ícones do Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .admin-sidebar {
+            width: 260px;
+            background-color: #212529;
+            color: #fff;
+            flex-shrink: 0;
+            border-radius: 0 1rem 1rem 0;
+            margin: 20px 0 20px 0;
+            min-height: calc(100vh - 100px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+            transition: all 0.3s ease;
+        }
+
+        .admin-sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.75);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin: 4px 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .admin-sidebar .nav-link:hover,
+        .admin-sidebar .nav-link.active {
+            color: #fff;
+            background-color: #0d6efd;
+        }
+
+        .admin-sidebar .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        .admin-content {
+            flex-grow: 1;
+            padding: 25px 30px;
+            overflow-y: auto;
+        }
+
+        .admin-section {
+            display: none;
+        }
+        .admin-section.active-section {
+            display: block;
+        }
+
+        @media (max-width: 991.98px) {
+            .admin-sidebar {
+                position: fixed;
+                top: 70px;
+                left: -280px;
+                z-index: 1040;
+                margin: 0;
+                height: calc(100vh - 70px);
+                border-radius: 0 1rem 1rem 0;
+            }
+            .admin-sidebar.show {
+                left: 0;
+            }
+            .admin-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-secondary-subtle">
+
+    <!-- 1. BARRA DE NAVEGAÇÃO -->
+    <nav class="navbar navbar-dark bg-dark sticky-top shadow px-2 px-md-4">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            
+            <div class="d-flex align-items-center gap-2">
+                <a class="navbar-brand fw-bold text-primary m-0" href="/admin">
+                    <i class="bi bi-mortarboard-fill me-1"></i>Uni<span class="text-white">BoLSas</span>
+                </a>
+
+                <button class="btn btn-outline-light btn-sm d-lg-none ms-2" type="button" onclick="toggleSidebar()" title="Menu Lateral">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <!-- Perfil do Administrador -->
+                <div class="dropdown">
+                    <a class="btn btn-outline-light rounded-pill dropdown-toggle d-flex align-items-center gap-2 px-2 px-md-3 py-1" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle fs-5 text-primary"></i>
+                        <span class="d-none d-sm-inline">Admin</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="/"><i class="bi bi-house me-2"></i>Ver Site Público</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Terminar Sessão</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- ESTRUTURA PRINCIPAL -->
+    <div class="d-flex">
+
+        <!-- Sidebar -->
+        <aside class="admin-sidebar py-4 shadow-sm" id="adminSidebar">
+            <div class="px-4 mb-3 text-uppercase text-muted fw-bold extra-small" style="font-size: 0.7rem; letter-spacing: 1px;">
+                Navegação Admin
+            </div>
+            
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="#" onclick="switchSection('dashboard', this)">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a class="nav-link" href="#" onclick="switchSection('bolsas', this)">
+                    <i class="bi bi-journal-bookmark-fill"></i> Gerir Bolsas
+                </a>
+                <a class="nav-link" href="#" onclick="switchSection('mentores', this)">
+                    <i class="bi bi-person-badge-fill"></i> Mentores Técnicos
+                </a>
+                <a class="nav-link" href="#" onclick="switchSection('bolseiros', this)">
+                    <i class="bi bi-people-fill"></i> Bolseiros Comunidade
+                </a>
+            </nav>
+
+            <hr class="border-secondary my-4 mx-3">
+
+            <div class="px-4">
+                <a href="/" class="btn btn-outline-light btn-sm w-100 rounded-pill py-2">
+                    <i class="bi bi-arrow-left me-1"></i> Ver Página Principal
+                </a>
+            </div>
+        </aside>
+
+        <!-- ÁREA DE CONTEÚDO -->
+        <main class="admin-content">
+
+            <!-- Mensagens Flash do Flask -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show rounded-3 mb-4" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- SECÇÃO DASHBOARD -->
+            <div id="section-dashboard" class="admin-section active-section">
+                <div style="background: #9299a0;" class="p-3 rounded-3 mb-4 shadow-sm">
+                    <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-speedometer2 me-2"></i>Painel Administrativo</h3>
+                </div>
+
+                <!-- 4 CARTÕES DE ESTATÍSTICAS REAIS -->
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold">Total de Bolsas Ativas</span>
+                                    <h2 class="fw-bold text-dark mb-0 mt-1">{{ total_bolsas }}</h2>
+                                </div>
+                                <div class="p-3 bg-primary-subtle text-primary rounded-circle">
+                                    <i class="bi bi-journal-check fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold">Bolsas a Expirar (15d)</span>
+                                    <h2 class="fw-bold text-dark mb-0 mt-1">{{ bolsas_expirar }}</h2>
+                                </div>
+                                <div class="p-3 bg-warning-subtle text-warning-emphasis rounded-circle">
+                                    <i class="bi bi-clock-history fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold">Serviços de Mentoria</span>
+                                    <h2 class="fw-bold text-dark mb-0 mt-1">{{ total_mentores }}</h2>
+                                </div>
+                                <div class="p-3 bg-info-subtle text-info rounded-circle">
+                                    <i class="bi bi-person-badge fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-semibold">Candidatos Registados</span>
+                                    <h2 class="fw-bold text-dark mb-0 mt-1">{{ total_candidatos }}</h2>
+                                </div>
+                                <div class="p-3 bg-success-subtle text-success rounded-circle">
+                                    <i class="bi bi-people fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <h5 class="fw-bold text-dark mb-3">Pedidos de Contacto Pendentes dos Candidatos ({{ pedidos|length }})</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Candidato</th>
+                                    <th>Bolseiro Destinatário</th>
+                                    <th>Dúvida / Pergunta</th>
+                                    <th>Data</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in pedidos %}
+                                <tr>
+                                    <td><strong>{{ p.candidato.nome }}</strong><br><small class="text-muted">{{ p.candidato.email }}</small></td>
+                                    <td>{{ p.bolseiro.nome }} ({{ p.bolseiro.pais }})</td>
+                                    <td>{{ p.pergunta }}</td>
+                                    <td>{{ p.data_pedido.strftime('%d/%m/%Y %H:%M') }}</td>
+                                    <td><span class="badge bg-warning text-dark">{{ p.status }}</span></td>
+                                </tr>
+                                {% else %}
+                                <tr><td colspan="5" class="text-center text-muted py-3">Nenhum pedido de contacto pendente neste momento.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECÇÃO GERIR BOLSAS -->
+            <div id="section-bolsas" class="admin-section">
+                <div style="background: #9299a0;" class="d-flex justify-content-between align-items-center p-3 rounded-3 mb-4 shadow-sm flex-wrap gap-2">
+                    <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-journal-bookmark-fill me-2"></i>Gestão de Bolsas de Estudo</h3>
+                    <button class="btn btn-dark btn-sm rounded-pill px-3 fw-bold" data-bs-toggle="modal" data-bs-target="#modalCadastrarBolsa">
+                        <i class="bi bi-plus-lg me-1"></i> Cadastrar Nova Bolsa
+                    </button>
+                </div>
+
+                <!-- Tabela de Bolsas Dinâmica -->
+                <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Título da Bolsa</th>
+                                    <th>Entidade / País</th>
+                                    <th>Nível</th>
+                                    <th>Prazo Final</th>
+                                    <th class="text-end">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for b in bolsas %}
+                                <tr>
+                                    <td>
+                                        <strong class="text-dark">{{ b.titulo }}</strong><br>
+                                        <small class="text-muted">{{ b.area_estudo or 'Geral' }}</small>
+                                    </td>
+                                    <td>{{ b.entidade }} ({{ b.pais_destino }})</td>
+                                    <td><span class="badge bg-light text-dark border">{{ b.nivel_estudo or 'Licenciatura' }}</span></td>
+                                    <td>{% if b.data_limite %}{{ b.data_limite.strftime('%d/%m/%Y') }}{% else %}Aberto{% endif %}</td>
+                                    <td class="text-end">
+                                        <a href="{{ b.link_oficial }}" target="_blank" class="btn btn-outline-secondary btn-sm rounded-circle me-1" title="Ver Link Oficial">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                        <form method="POST" action="/admin/eliminar-bolsa/{{ b.id }}" class="d-inline" onsubmit="return confirm('Tem a certeza que deseja eliminar esta bolsa permanentemente?');">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr><td colspan="5" class="text-center text-muted py-4">Nenhuma bolsa cadastrada ainda.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECÇÃO MENTORES -->
+            <div id="section-mentores" class="admin-section">
+                <div style="background: #9299a0;" class="p-3 rounded-3 mb-4 shadow-sm">
+                    <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-person-badge-fill me-2"></i>Catálogo de Mentorias Pagas</h3>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Serviço de Mentoria</th>
+                                    <th>Duração</th>
+                                    <th>Preço</th>
+                                    <th>Mentor Responsável</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for m in mentorias %}
+                                <tr>
+                                    <td><strong>{{ m.titulo }}</strong><br><small class="text-muted">{{ m.descricao }}</small></td>
+                                    <td>{{ m.duracao }}</td>
+                                    <td class="fw-bold text-success">{{ "{:,.2f}".format(m.preco_kz).replace(',', ' ').replace('.', ',') }} Kz</td>
+                                    <td>{{ m.nome_mentor }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECÇÃO BOLSEIROS -->
+            <div id="section-bolseiros" class="admin-section">
+                <div style="background: #9299a0;" class="p-3 rounded-3 mb-4 shadow-sm">
+                    <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-people-fill me-2"></i>Bolseiros Voluntários Verificados</h3>
+                </div>
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>País / Universidade</th>
+                                    <th>Curso</th>
+                                    <th>E-mail Privado (Intermediação)</th>
+                                    <th>Selo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bol in bolseiros %}
+                                <tr>
+                                    <td><strong>{{ bol.nome }}</strong><br><small class="text-muted">{{ bol.situacao }}</small></td>
+                                    <td>{{ bol.universidade }} ({{ bol.pais }})</td>
+                                    <td>{{ bol.curso }}</td>
+                                    <td><code>{{ bol.email_privado }}</code></td>
+                                    <td><span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Verificado</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL PARA CADASTRAR NOVA BOLSA (Conectado via POST a /admin/cadastrar-bolsa) -->
+    <div class="modal fade" id="modalCadastrarBolsa" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-plus-circle me-2"></i>Cadastrar Nova Bolsa de Estudo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form action="/admin/cadastrar-bolsa" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label class="form-label small fw-bold">Título da Bolsa</label>
+                                <input type="text" class="form-control" name="titulo" placeholder="ex: Bolsa Nacional de Mérito" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Entidade Promotora</label>
+                                <input type="text" class="form-control" name="entidade" placeholder="ex: INAGBE" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">País de Destino</label>
+                                <input type="text" class="form-control" name="pais_destino" placeholder="ex: Angola, Portugal, Reino Unido" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Área de Estudo</label>
+                                <select class="form-select" name="area_estudo" required>
+                                    <option value="" selected disabled>Selecione a área...</option>
+                                    <option value="Engenharia e Tecnologia">Engenharia e Tecnologia</option>
+                                    <option value="Ciências Sociais">Ciências Sociais</option>
+                                    <option value="Saúde e Medicina">Saúde e Medicina</option>
+                                    <option value="Geral">Geral / Todas</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Nível de Estudo</label>
+                                <select class="form-select" name="nivel_estudo" required>
+                                    <option value="" selected disabled>Selecione o nível...</option>
+                                    <option value="Licenciatura">Licenciatura</option>
+                                    <option value="Mestrado">Mestrado</option>
+                                    <option value="Doutoramento">Doutoramento</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Tipo de Cobertura</label>
+                                <select class="form-select" name="cobertura" required>
+                                    <option value="integral">100% Integral</option>
+                                    <option value="parcial">Parcial</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Prazo Limite</label>
+                                <input type="date" class="form-control" name="data_limite" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Link Oficial de Candidatura</label>
+                                <input type="url" class="form-control" name="link_oficial" placeholder="https://..." required>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Resumo dos Benefícios</label>
+                                <input type="text" class="form-control" name="beneficio_resumo" placeholder="ex: Propinas integrais + subsídio" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Descrição Completa</label>
+                                <textarea class="form-control" name="descricao" rows="3" placeholder="Requisitos e elegibilidade..." required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">Guardar Bolsa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function switchSection(sectionId, el) {
+            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active-section'));
+            document.querySelectorAll('.admin-sidebar .nav-link').forEach(link => link.classList.remove('active'));
+
+            document.getElementById('section-' + sectionId).classList.add('active-section');
+            el.classList.add('active');
+
+            document.getElementById('adminSidebar').classList.remove('show');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('adminSidebar').classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

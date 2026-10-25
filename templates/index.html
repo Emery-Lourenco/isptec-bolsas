@@ -13,7 +13,7 @@
 
 <body class="bg-secondary-subtle">
 
-    <!-- barra de navegação superior -->
+    <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
       <div class="container">
         <a class="navbar-brand fw-bold text-primary" href="/">
@@ -41,11 +41,29 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#mentorias"><i class="bi bi-person-badge me-1"></i>Mentorias</a>
                 </li>
-                <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                    <a class="btn btn-outline-light px-4 rounded-pill" href="/login">
-                        <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
-                    </a>
-                </li>
+
+                <!-- VERIFICAÇÃO DE SESSÃO DINÂMICA -->
+                {% if session.get('utilizador_id') %}
+                    {% if session.get('utilizador_tipo') == 'admin' %}
+                        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                            <a class="btn btn-success px-4 rounded-pill d-flex align-items-center gap-1" href="/admin">
+                                <i class="bi bi-shield-lock me-1"></i>Painel Admin
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                            <a class="btn btn-primary px-4 rounded-pill d-flex align-items-center gap-1" href="/dashboard">
+                                <i class="bi bi-speedometer2 me-1"></i>Meu Painel
+                            </a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a class="btn btn-outline-light px-4 rounded-pill" href="/login">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
       </div>
@@ -290,7 +308,7 @@
     <!-- SECÇÃO DE MENTORIAS (Catálogo lido da base de dados) -->
     <section class="container my-5" id="mentorias">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
-            <h3 class="fw-bold text-dark m-0">Mentorias</h3>
+            <h3 class="fw-bold text-dark m-0">Catálogo de Mentorias Pagas</h3>
         </div>
 
         <div class="row g-4">
@@ -307,9 +325,15 @@
                         <small class="text-secondary"><i class="bi bi-person-badge me-1"></i>Mentor: {{ m.nome_mentor }}</small>
                     </div>
                     <div class="pt-3 border-top mt-3 text-end">
-                        <a href="/login" class="btn btn-outline-success rounded-pill px-4">
-                            <i class="bi bi-calendar-check me-1"></i>Contratar Mentoria
-                        </a>
+                        {% if session.get('utilizador_id') %}
+                            <a href="/dashboard#mentores-tecnicos" class="btn btn-outline-success rounded-pill px-4">
+                                <i class="bi bi-calendar-check me-1"></i>Contratar Mentoria
+                            </a>
+                        {% else %}
+                            <a href="/login" class="btn btn-outline-success rounded-pill px-4">
+                                <i class="bi bi-calendar-check me-1"></i>Contratar Mentoria
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -399,7 +423,6 @@
 
             const chatMessages = document.getElementById('chatMessages');
 
-            // 1. Mensagem enviada pelo utilizador
             const userMsg = document.createElement('div');
             userMsg.className = 'p-2 bg-primary text-white rounded shadow-sm mb-2 text-end ms-auto fs-7';
             userMsg.style.maxWidth = '85%';
@@ -408,7 +431,6 @@
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // 2. Chamada à rota /api/chatbot no backend Python
             try {
                 const response = await fetch('/api/chatbot', {
                     method: 'POST',
@@ -417,7 +439,6 @@
                 });
                 const data = await response.json();
 
-                // 3. Resposta devolvida pelo bot
                 const botMsg = document.createElement('div');
                 botMsg.className = 'p-2 bg-white rounded shadow-sm mb-2 text-dark fs-7 border';
                 botMsg.style.maxWidth = '85%';
