@@ -4,7 +4,7 @@
 import importlib.util  # Permite verificar que bibliotecas (drivers) estão instaladas
 import os  # Biblioteca nativa para ler variáveis de ambiente do sistema
 import sys  # Permite ler os comandos escritos no terminal (ferramenta de contas)
-from datetime import datetime, timezone  # Registo de carimbos temporais
+from datetime import datetime, timezone, date, timedelta  # Registo de carimbos temporais
 from functools import wraps  # Usado para criar o "guarda" que exige sessão iniciada
 from dotenv import (
     load_dotenv,  # Carrega as configurações secretas do ficheiro .env
@@ -21,11 +21,8 @@ from flask import (
 )
 
 from flask_sqlalchemy import SQLAlchemy  # A ferramenta (ORM) que faz a ponte entre Python e o PostgreSQL
-<<<<<<< HEAD
 from sqlalchemy import func  # Funções SQL (lower/trim) para comparar e-mails sem diferenças de maiúsculas
 from sqlalchemy.exc import IntegrityError  # Erro lançado quando a BD recusa um dado repetido (ex.: e-mail)
-=======
->>>>>>> origin/main
 from werkzeug.security import (  # Utilitários nativos para senhas seguras (RNF04)
     check_password_hash,
     generate_password_hash,
@@ -34,18 +31,14 @@ from werkzeug.security import (  # Utilitários nativos para senhas seguras (RNF
 # Carrega o ficheiro .env local antes de iniciar as configurações
 load_dotenv()
 
-<<<<<<< HEAD
 # Constante de segurança que define o único e-mail autorizado a deter privilégios administrativos
 EMAIL_ADMIN_OFICIAL = "admin@unibolsas.co.ao"
 
-=======
->>>>>>> origin/main
 # ==============================================================================
 # INICIALIZAÇÃO DA APLICAÇÃO WEB
 # ==============================================================================
 app = Flask(__name__)
 
-<<<<<<< HEAD
 
 @app.after_request
 def impedir_cache_de_paginas_de_sessao(resposta):
@@ -61,19 +54,10 @@ app.config["SECRET_KEY"] = os.getenv(
     "SECRET_KEY", "chave_secreta_mvp_isptec_2026"
 )
 
-=======
-# CHAVE SECRETA DA SESSÃO:
-# O Flask precisa de uma chave para encriptar os cookies de sessão no browser do utilizador.
-app.config["SECRET_KEY"] = os.getenv(
-    "SECRET_KEY", "chave_secreta_mvp_isptec_2026"
-)
-
->>>>>>> origin/main
 # ==============================================================================
 # CONFIGURAÇÃO DA BASE DE DADOS (POSTGRESQL)
 # ==============================================================================
 # Lê a string de conexão remota definida no ficheiro .env para proteger as credenciais
-<<<<<<< HEAD
 def ler_url_da_base_de_dados():
     """Lê o DATABASE_URL do .env e corrige os erros mais comuns antes de ligar."""
     url = os.getenv("DATABASE_URL")
@@ -96,9 +80,6 @@ def ler_url_da_base_de_dados():
 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = ler_url_da_base_de_dados()
-=======
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
->>>>>>> origin/main
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Liga a extensão SQLAlchemy à nossa aplicação Flask
@@ -123,10 +104,7 @@ class Utilizador(db.Model):
 
     pedidos_contacto = db.relationship("PedidoContacto", backref="candidato", lazy=True)
     contratacoes = db.relationship("ContratacaoMentoria", backref="candidato", lazy=True)
-<<<<<<< HEAD
     bolsas_guardadas = db.relationship("BolsaGuardada", backref="candidato", cascade="all, delete-orphan", lazy=True)
-=======
->>>>>>> origin/main
 
     def definir_senha(self, senha_limpa):
         self.senha_hash = generate_password_hash(senha_limpa)
@@ -158,10 +136,7 @@ class Bolsa(db.Model):
 
     itens_cobertos = db.relationship("BolsaItemCoberto", backref="bolsa", cascade="all, delete-orphan", lazy=True)
     bolseiros = db.relationship("BolseiroVoluntario", backref="bolsa_rel", lazy=True)
-<<<<<<< HEAD
     guardada_por = db.relationship("BolsaGuardada", backref="bolsa", cascade="all, delete-orphan", lazy=True)
-=======
->>>>>>> origin/main
 
 
 # 3. TABELA ASSOCIATIVA NORMALIZADA DE ITENS COBERTOS (Atende RF10 - 1FN e 2FN)
@@ -234,7 +209,6 @@ class ContratacaoMentoria(db.Model):
     data_contratacao = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 
-<<<<<<< HEAD
 # 8. TABELA ASSOCIATIVA NORMALIZADA DE BOLSAS GUARDADAS / FAVORITAS (Atende RF11, UC06 - 1FN, 2FN e 3FN)
 class BolsaGuardada(db.Model):
     __tablename__ = "bolsas_guardadas"
@@ -244,19 +218,15 @@ class BolsaGuardada(db.Model):
     bolsa_id = db.Column(db.Integer, db.ForeignKey("bolsas.id", ondelete="CASCADE"), nullable=False)
     criado_em = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
-    # Restrição de unicidade para evitar guardar a mesma bolsa repetidamente pelo mesmo utilizador
     __table_args__ = (db.UniqueConstraint("candidato_id", "bolsa_id", name="uq_candidato_bolsa_guardada"),)
 
 
-=======
->>>>>>> origin/main
 # ==============================================================================
 # POVOAMENTO INICIAL DE DADOS DE TESTE (SEEDS)
 # ==============================================================================
 def criar_dados_iniciais():
     """Garante a existência de dados mínimos reais para demonstração do MVP."""
     try:
-<<<<<<< HEAD
         # 1. Criar o Administrador Inicial único caso não exista
         admin_existente = Utilizador.query.filter_by(tipo="admin").first()
         if not admin_existente:
@@ -271,9 +241,6 @@ def criar_dados_iniciais():
             print(f"Conta de Administrador criada com sucesso ({EMAIL_ADMIN_OFICIAL})!")
 
         # 2. Criar bolseiros voluntários se a tabela estiver vazia
-=======
-        # Criar bolseiros voluntários se a tabela estiver vazia
->>>>>>> origin/main
         if BolseiroVoluntario.query.count() == 0:
             bolseiros_iniciais = [
                 BolseiroVoluntario(
@@ -319,11 +286,7 @@ def criar_dados_iniciais():
             db.session.bulk_save_objects(bolseiros_iniciais)
             db.session.commit()
 
-<<<<<<< HEAD
         # 3. Criar catálogo de mentorias se estiver vazio
-=======
-        # Criar catálogo de mentorias se estiver vazio
->>>>>>> origin/main
         if Mentoria.query.count() == 0:
             mentorias_iniciais = [
                 Mentoria(
@@ -349,24 +312,18 @@ def criar_dados_iniciais():
 
 
 # ==============================================================================
-<<<<<<< HEAD
-# FUNÇÕES AUXILIARES DE SESSÃO (pequenas e reutilizadas por várias rotas)
+# FUNÇÕES AUXILIARES DE SESSÃO E CONTROLO DE ACESSO
 # ==============================================================================
 def utilizador_atual():
     """Devolve o Utilizador que tem sessão iniciada, ou None se ninguém entrou."""
     utilizador_id = session.get("utilizador_id")
     if utilizador_id is None:
         return None
-    # Vai à base de dados confirmar que a conta ainda existe
     return db.session.get(Utilizador, utilizador_id)
 
 
 def buscar_utilizador_por_email(email):
-    """Procura um utilizador pelo e-mail, ignorando maiúsculas/minúsculas e espaços.
-
-    Assim "Admin@UniBolsas.co.ao" e "admin@unibolsas.co.ao" são tratados como o mesmo e-mail,
-    mesmo que a conta tenha sido criada à mão na base de dados.
-    """
+    """Procura um utilizador pelo e-mail, ignorando maiúsculas/minúsculas e espaços."""
     email = (email or "").strip().lower()
     if not email:
         return None
@@ -379,18 +336,12 @@ def parece_hash(valor):
 
 
 def senha_correta(utilizador, senha):
-    """Confere a palavra-passe digitada com a guardada na base de dados.
-
-    Também aceita contas antigas criadas à mão com a senha em texto simples: se a senha
-    estiver certa, converte-a logo para hash seguro (RNF04) para não ficar exposta.
-    """
+    """Confere a palavra-passe digitada com a guardada na base de dados."""
     try:
         if utilizador.verificar_senha(senha):
             return True
     except (ValueError, TypeError):
-        pass  # formato de hash desconhecido: nada a fazer
-    # Conta antiga com a senha em texto simples (só se NÃO for um hash, para ninguém
-    # conseguir entrar a escrever o próprio hash como se fosse a senha)
+        pass
     if not parece_hash(utilizador.senha_hash) and utilizador.senha_hash == senha:
         utilizador.definir_senha(senha)
         db.session.commit()
@@ -400,18 +351,14 @@ def senha_correta(utilizador, senha):
 
 def iniciar_sessao(utilizador):
     """Guarda na sessão os dados essenciais de quem acabou de entrar."""
-    session.clear()  # limpa qualquer sessão anterior
+    session.clear()
     session["utilizador_id"] = utilizador.id
     session["utilizador_nome"] = utilizador.nome
     session["utilizador_tipo"] = utilizador.tipo
 
 
 def login_obrigatorio(funcao):
-    """'Guarda' das páginas privadas: sem sessão iniciada, envia para o login.
-
-    Usa-se escrevendo @login_obrigatorio por baixo do @app.route da página.
-    """
-
+    """'Guarda' das páginas privadas: sem sessão iniciada, envia para o login."""
     @wraps(funcao)
     def verificar(*args, **kwargs):
         if utilizador_atual() is None:
@@ -419,13 +366,26 @@ def login_obrigatorio(funcao):
             flash("Inicie sessão para continuar.", "warning")
             return redirect(url_for("login"))
         return funcao(*args, **kwargs)
-
     return verificar
 
 
+def admin_obrigatorio(funcao):
+    """'Guarda' exclusivo do painel administrativo: só utilizadores admin entram."""
+    @wraps(funcao)
+    def verificar_admin(*args, **kwargs):
+        utilizador = utilizador_atual()
+        if utilizador is None:
+            session.clear()
+            flash("Inicie sessão como administrador para continuar.", "warning")
+            return redirect(url_for("login"))
+        if utilizador.tipo != "admin":
+            flash("Acesso não autorizado: área reservada exclusivamente à administração.", "danger")
+            return redirect(url_for("dashboard"))
+        return funcao(*args, **kwargs)
+    return verificar_admin
+
+
 # ==============================================================================
-=======
->>>>>>> origin/main
 # ROTAS E LÓGICA DE NEGÓCIO (ENDPOINTS)
 # ==============================================================================
 
@@ -433,16 +393,12 @@ def login_obrigatorio(funcao):
 # ROTA 1: PÁGINA PRINCIPAL COM FILTROS DE PESQUISA (Atende UC03, UC07, UC11)
 @app.route("/")
 def index():
-    # Extrai parâmetros de pesquisa via GET enviados pelo formulário
     termo_pesquisa = request.args.get("pesquisa", "").strip()
     filtro_pais = request.args.get("pais", "").strip()
     filtro_nivel = request.args.get("nivel", "").strip()
 
-    # Inicia a query base (apenas bolsas ativas e elegíveis para angolanos)
     query = Bolsa.query.filter_by(ativa=True, elegivel_angolanos=True)
-<<<<<<< HEAD
 
-    # Aplicação incremental de filtros
     if termo_pesquisa:
         termo = f"%{termo_pesquisa}%"
         query = query.filter(
@@ -458,13 +414,8 @@ def index():
     if filtro_nivel and filtro_nivel != "Todos os Níveis":
         query = query.filter(Bolsa.nivel_estudo.ilike(filtro_nivel))
 
-    # Executa a consulta
     bolsas_disponiveis = query.order_by(Bolsa.id.desc()).all()
-
-    # Carrega bolseiros voluntários verificados para a secção de comunidade
     bolseiros_destaque = BolseiroVoluntario.query.filter_by(verificado=True).limit(6).all()
-
-    # Carrega o catálogo de mentorias ativas
     mentorias_catalogo = Mentoria.query.filter_by(ativa=True).all()
 
     return render_template(
@@ -487,14 +438,12 @@ def chatbot_responder():
     if not mensagem:
         return jsonify({"resposta": "Por favor, escreve uma pergunta para que te possa ajudar."})
 
-    # Regra 1: Dúvidas sobre bolsas integrais / 100% comparticipadas
     if "integral" in mensagem or "100%" in mensagem or "comparticipada" in mensagem or "integrais" in mensagem:
         total_integrais = Bolsa.query.filter_by(ativa=True, cobertura="integral").count()
         return jsonify({
             "resposta": f"Atualmente temos {total_integrais} bolsa(s) 100% comparticipada(s) no portal. As bolsas integrais cobrem propinas e alojamento sem custos diretos para ti."
         })
 
-    # Regra 2: Dúvidas sobre preços ou contratação de mentorias
     elif "mentoria" in mensagem or "preço" in mensagem or "custo" in mensagem or "valor" in mensagem:
         mentorias = Mentoria.query.filter_by(ativa=True).all()
         lista_mentorias = ", ".join([f"{m.titulo} ({int(m.preco_kz):,} Kz)".replace(",", ".") for m in mentorias])
@@ -502,20 +451,17 @@ def chatbot_responder():
             "resposta": f"Oferecemos mentorias pagas para apoiar a tua candidatura: {lista_mentorias}. Podes agendar na secção Mentorias."
         })
 
-    # Regra 3: Dúvidas sobre o INAGBE ou bolsas internas em Angola
     elif "inagbe" in mensagem or "angola" in mensagem or "interna" in mensagem:
         total_internas = Bolsa.query.filter_by(ativa=True, tipo="interna").count()
         return jsonify({
             "resposta": f"Temos {total_internas} bolsa(s) internas em Angola. Podes consultar os requisitos e prazos diretamente no nosso catálogo com o filtro de país 'Angola'."
         })
 
-    # Regra 4: Dúvidas sobre documentos ou requisitos
     elif "documento" in mensagem or "requisito" in mensagem or "papel" in mensagem:
         return jsonify({
             "resposta": "Os documentos habituais incluem: Certificado de Habilitações autenticado, Cópia do BI, Carta de Motivação e Carta de Recomendação. Cada bolsa detalha os seus requisitos no respetivo cartão."
         })
 
-    # Resposta padrão orientadora
     return jsonify({
         "resposta": "Sou o UniX! Podes perguntar-me sobre 'bolsas integrais', 'mentorias e preços', 'bolsas do INAGBE' ou 'documentos necessários'."
     })
@@ -524,7 +470,6 @@ def chatbot_responder():
 # ROTA 3: CRIAÇÃO DE CONTA DE UTILIZADOR (Atende UC01 / RF01, RNF04)
 @app.route("/criar-conta", methods=["GET", "POST"])
 def criar_conta():
-    # Se o utilizador já tem sessão iniciada, redireciona para o painel
     if utilizador_atual() is not None:
         return redirect(url_for("dashboard"))
 
@@ -534,82 +479,74 @@ def criar_conta():
         senha = request.form.get("senha", "")
         confirmar_senha = request.form.get("confirmar_senha", "")
 
-        # 1. Validação de preenchimento dos campos
         if not nome or not email or not senha:
             flash("Por favor, preencha todos os campos obrigatórios.", "danger")
             return render_template("criar_conta.html")
 
-        # 2. Validação do tamanho da palavra-passe (o HTML também exige, mas o servidor confirma)
         if len(senha) < 6:
             flash("A palavra-passe deve ter pelo menos 6 caracteres.", "danger")
             return render_template("criar_conta.html")
 
-        # 3. Validação de coincidência de palavras-passe
         if senha != confirmar_senha:
             flash("As palavras-passe introduzidas não coincidem.", "danger")
             return render_template("criar_conta.html")
 
-        # 4. Validação de unicidade de e-mail na base de dados (1FN)
         utilizador_existente = buscar_utilizador_por_email(email)
         if utilizador_existente:
             flash("Este e-mail já se encontra registado. Tente iniciar sessão.", "warning")
             return render_template("criar_conta.html")
 
-        # 5. Criação do novo candidato com tipo obrigatoriamente restrito a 'candidato'
         novo_candidato = Utilizador(
             nome=nome,
             email=email,
-            tipo="candidato",  # Regra de segurança: registos públicos nunca são admin
+            tipo="candidato",
         )
-        novo_candidato.definir_senha(senha)  # Hash encriptado conforme RNF04
+        novo_candidato.definir_senha(senha)
 
         try:
             db.session.add(novo_candidato)
             db.session.commit()
         except IntegrityError:
-            # Dois registos com o mesmo e-mail ao mesmo tempo: a BD recusa o segundo
             db.session.rollback()
             flash("Este e-mail já se encontra registado. Tente iniciar sessão.", "warning")
             return render_template("criar_conta.html")
 
-        # 6. Inicia sessão imediatamente após o registo com sucesso
         iniciar_sessao(novo_candidato)
         flash(f"Conta criada com sucesso! Bem-vindo, {novo_candidato.nome}.", "success")
         return redirect(url_for("dashboard"))
 
-    # Pedido GET normal: apresenta o formulário
     return render_template("criar_conta.html")
 
 
-# ROTA 4: INÍCIO DE SESSÃO (Atende UC02 / RF02)
+# ROTA 4: INÍCIO DE SESSÃO COM REDIRECIONAMENTO INTELIGENTE (Atende UC02 / RF02)
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    # Quem já entrou não precisa de ver o formulário outra vez
-    if utilizador_atual() is not None:
-        return redirect(url_for("dashboard"))
+    utilizador = utilizador_atual()
+    if utilizador is not None:
+        # Se for admin vai para o painel admin; se for candidato vai para o dashboard
+        return redirect(url_for("dashboard_admin" if utilizador.tipo == "admin" else "dashboard"))
 
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         senha = request.form.get("senha", "")
 
-        # 1. Os dois campos têm de vir preenchidos
         if not email or not senha:
             flash("Preencha o e-mail e a palavra-passe.", "danger")
             return render_template("login.html")
 
-        # 2. Procura o utilizador na base de dados pelo e-mail e confere a senha encriptada
         utilizador = buscar_utilizador_por_email(email)
         if utilizador is None or not senha_correta(utilizador, senha):
-            # Mensagem igual nos dois casos: não revela se o e-mail existe
             flash("E-mail ou palavra-passe incorretos.", "danger")
             return render_template("login.html")
 
-        # 3. Tudo certo: guarda a sessão e segue para o painel
         iniciar_sessao(utilizador)
         flash(f"Bem-vindo de volta, {utilizador.nome}!", "success")
+
+        # Redireciona de acordo com o papel na base de dados
+        if utilizador.tipo == "admin":
+            return redirect(url_for("dashboard_admin"))
         return redirect(url_for("dashboard"))
 
-    # Pedido GET normal: apresenta o formulário
     return render_template("login.html")
 
 
@@ -621,8 +558,7 @@ def logout():
     return redirect(url_for("login"))
 
 
-# ATALHOS PARA OS LINKS DO FRONT: o HTML antigo usa links como "index.html" e
-# "criar_conta.html". Em vez de mexer no front, estas rotas reencaminham para a página certa.
+# ATALHOS PARA OS LINKS DO FRONT
 @app.route("/index.html")
 def atalho_index():
     return redirect(url_for("index"))
@@ -649,14 +585,10 @@ def atalho_dashboard():
 def dashboard():
     utilizador = utilizador_atual()
 
-    # Obtém todas as bolsas ativas da base de dados PostgreSQL
     bolsas_disponiveis = Bolsa.query.filter_by(ativa=True).order_by(Bolsa.id.desc()).all()
-    # Obtém bolseiros voluntários verificados
     bolseiros_lista = BolseiroVoluntario.query.filter_by(verificado=True).all()
-    # Obtém o catálogo de mentorias
     mentorias_lista = Mentoria.query.filter_by(ativa=True).all()
 
-    # Dados PESSOAIS do candidato (só os dele): mentorias contratadas e pedidos a bolseiros
     minhas_contratacoes = (
         ContratacaoMentoria.query.filter_by(candidato_id=utilizador.id)
         .order_by(ContratacaoMentoria.data_contratacao.desc())
@@ -668,15 +600,12 @@ def dashboard():
         .all()
     )
 
-    # Bolsas GUARDADAS / FAVORITAS do candidato logado (Atende RF11, UC06)
     registos_guardados = (
         BolsaGuardada.query.filter_by(candidato_id=utilizador.id)
         .order_by(BolsaGuardada.criado_em.desc())
         .all()
     )
-    # Extrai os objetos Bolsa das associações guardadas
     minhas_bolsas_guardadas = [registo.bolsa for registo in registos_guardados if registo.bolsa]
-    # Lista de IDs de bolsas guardadas para destacar o botão no carrossel
     ids_bolsas_guardadas = {registo.bolsa_id for registo in registos_guardados}
 
     return render_template(
@@ -693,28 +622,23 @@ def dashboard():
 
 
 # ROTA 7: GUARDAR OU REMOVER BOLSA DOS FAVORITOS (Atende UC06 / RF11)
-# O clique no botão marcador submete um POST alternando o estado de favorito
 @app.route("/guardar-bolsa/<int:bolsa_id>", methods=["POST"])
 @login_obrigatorio
 def guardar_bolsa(bolsa_id):
     utilizador = utilizador_atual()
 
-    # 1. A bolsa tem de existir e estar ativa
     bolsa = db.session.get(Bolsa, bolsa_id)
     if bolsa is None or not bolsa.ativa:
         flash("Bolsa não encontrada ou inativa.", "danger")
         return redirect(url_for("dashboard"))
 
-    # 2. Verifica se a bolsa já está nos favoritos do candidato
     guardada = BolsaGuardada.query.filter_by(candidato_id=utilizador.id, bolsa_id=bolsa.id).first()
 
     if guardada:
-        # Se já estava guardada, remove dos favoritos (toggle)
         db.session.delete(guardada)
         db.session.commit()
         flash(f'Bolsa "{bolsa.titulo}" removida dos teus favoritos.', "info")
     else:
-        # Se não estava guardada, adiciona à tabela associativa
         novo_favorito = BolsaGuardada(candidato_id=utilizador.id, bolsa_id=bolsa.id)
         db.session.add(novo_favorito)
         db.session.commit()
@@ -724,20 +648,16 @@ def guardar_bolsa(bolsa_id):
 
 
 # ROTA 8: PEDIR CONTACTO COM UM BOLSEIRO (Atende UC08 / RF17)
-# O botão "Conversar com Bolseiro" envia um formulário POST para /pedir-contacto/<id do bolseiro>
-# Campo opcional do formulário: "pergunta"
 @app.route("/pedir-contacto/<int:bolseiro_id>", methods=["POST"])
 @login_obrigatorio
 def pedir_contacto(bolseiro_id):
     utilizador = utilizador_atual()
 
-    # 1. O bolseiro tem de existir e estar verificado
     bolseiro = db.session.get(BolseiroVoluntario, bolseiro_id)
     if bolseiro is None or not bolseiro.verificado:
         flash("Esse bolseiro não está disponível.", "danger")
         return redirect(url_for("dashboard"))
 
-    # 2. Não permite repetir um pedido que ainda está pendente para o mesmo bolseiro
     pedido_pendente = PedidoContacto.query.filter_by(
         candidato_id=utilizador.id, bolseiro_id=bolseiro.id, status="Pendente"
     ).first()
@@ -745,7 +665,6 @@ def pedir_contacto(bolseiro_id):
         flash(f"Já tem um pedido pendente para {bolseiro.nome}.", "warning")
         return redirect(url_for("dashboard") + "#bolseiros-comunidade")
 
-    # 3. Guarda o pedido (a equipa encaminha ao bolseiro, sem revelar contactos pessoais)
     pergunta = request.form.get("pergunta", "").strip()
     if not pergunta:
         pergunta = "Gostaria de conversar sobre a minha candidatura."
@@ -763,20 +682,16 @@ def pedir_contacto(bolseiro_id):
 
 
 # ROTA 9: CONTRATAR UMA MENTORIA (Atende UC12 / RF21)
-# O botão "Solicitar" envia um formulário POST para /contratar-mentoria/<id da mentoria>
-# Campo opcional do formulário: "data_preferida"
 @app.route("/contratar-mentoria/<int:mentoria_id>", methods=["POST"])
 @login_obrigatorio
 def contratar_mentoria(mentoria_id):
     utilizador = utilizador_atual()
 
-    # 1. A mentoria tem de existir e estar ativa
     mentoria = db.session.get(Mentoria, mentoria_id)
     if mentoria is None or not mentoria.ativa:
         flash("Essa mentoria não está disponível.", "danger")
         return redirect(url_for("dashboard"))
 
-    # 2. Não permite contratar outra vez uma mentoria que ainda está por pagar
     por_pagar = ContratacaoMentoria.query.filter_by(
         candidato_id=utilizador.id, mentoria_id=mentoria.id, status_pagamento="Pendente"
     ).first()
@@ -784,7 +699,6 @@ def contratar_mentoria(mentoria_id):
         flash("Já solicitou esta mentoria e falta confirmar o pagamento.", "warning")
         return redirect(url_for("dashboard") + "#mentores-tecnicos")
 
-    # 3. Regista a contratação com o pagamento "Pendente"
     data_preferida = request.form.get("data_preferida", "").strip()
     if not data_preferida:
         data_preferida = "A combinar com o mentor"
@@ -802,14 +716,12 @@ def contratar_mentoria(mentoria_id):
 
 
 # ROTA 10: PAGAMENTO SIMULADO DA MENTORIA (Atende UC12 / RF22)
-# Não há dinheiro real: apenas muda o estado de "Pendente" para "Pago"
 @app.route("/pagar-mentoria/<int:contratacao_id>", methods=["POST"])
 @login_obrigatorio
 def pagar_mentoria(contratacao_id):
     utilizador = utilizador_atual()
 
     contratacao = db.session.get(ContratacaoMentoria, contratacao_id)
-    # Só o dono da contratação a pode pagar (um candidato nunca mexe nas dos outros)
     if contratacao is None or contratacao.candidato_id != utilizador.id:
         flash("Contratação não encontrada.", "danger")
         return redirect(url_for("dashboard"))
@@ -825,18 +737,108 @@ def pagar_mentoria(contratacao_id):
 
 
 # ==============================================================================
+# ROTAS DO PAINEL DE ADMINISTRAÇÃO (Atende UC06, UC09, UC10, UC13 | RF08 a RF14)
+# ==============================================================================
+
+
+# ROTA 11: PAINEL ADMINISTRATIVO GERAL
+@app.route("/admin")
+@admin_obrigatorio
+def dashboard_admin():
+    # 1. Estatísticas em tempo real calculadas no PostgreSQL
+    total_bolsas_ativas = Bolsa.query.filter_by(ativa=True).count()
+    total_mentores = Mentoria.query.filter_by(ativa=True).count()
+    total_candidatos = Utilizador.query.filter_by(tipo="candidato").count()
+
+    # Bolsas a expirar nos próximos 15 dias
+    hoje = date.today()
+    limite_expiracao = hoje + timedelta(days=15)
+    bolsas_a_expirar = Bolsa.query.filter(
+        Bolsa.ativa == True,
+        Bolsa.data_limite != None,
+        Bolsa.data_limite >= hoje,
+        Bolsa.data_limite <= limite_expiracao
+    ).count()
+
+    # 2. Listagens completas para gestão
+    todas_as_bolsas = Bolsa.query.order_by(Bolsa.id.desc()).all()
+    todos_os_bolseiros = BolseiroVoluntario.query.order_by(BolseiroVoluntario.id.desc()).all()
+    todas_as_mentorias = Mentoria.query.order_by(Mentoria.id.desc()).all()
+    pedidos_contacto_pendentes = PedidoContacto.query.order_by(PedidoContacto.data_pedido.desc()).all()
+
+    return render_template(
+        "dashbord_admin.html",
+        total_bolsas=total_bolsas_ativas,
+        bolsas_expirar=bolsas_a_expirar,
+        total_mentores=total_mentores,
+        total_candidatos=total_candidatos,
+        bolsas=todas_as_bolsas,
+        bolseiros=todos_os_bolseiros,
+        mentorias=todas_as_mentorias,
+        pedidos=pedidos_contacto_pendentes,
+    )
+
+
+# ROTA 12: CADASTRAR NOVA BOLSA (Atende UC06 / RF08, RF09, RF10)
+@app.route("/admin/cadastrar-bolsa", methods=["POST"])
+@admin_obrigatorio
+def admin_cadastrar_bolsa():
+    titulo = request.form.get("titulo", "").strip()
+    entidade = request.form.get("entidade", "").strip()
+    pais_destino = request.form.get("pais_destino", "").strip()
+    area_estudo = request.form.get("area_estudo", "").strip()
+    nivel_estudo = request.form.get("nivel_estudo", "").strip()
+    cobertura = request.form.get("cobertura", "integral").strip()
+    data_limite_str = request.form.get("data_limite", "").strip()
+    link_oficial = request.form.get("link_oficial", "").strip()
+    beneficio_resumo = request.form.get("beneficio_resumo", "").strip()
+    descricao = request.form.get("descricao", "").strip()
+
+    data_limite = None
+    if data_limite_str:
+        try:
+            data_limite = datetime.strptime(data_limite_str, "%Y-%m-%d").date()
+        except ValueError:
+            pass
+
+    nova_bolsa = Bolsa(
+        titulo=titulo,
+        entidade=entidade or "Entidade Oficial",
+        pais_destino=pais_destino or "Angola",
+        tipo="interna" if pais_destino.lower() == "angola" else "externa",
+        cobertura=cobertura,
+        area_estudo=area_estudo,
+        nivel_estudo=nivel_estudo,
+        data_limite=data_limite,
+        link_oficial=link_oficial or "https://inagbe.gov.ao/#/home",
+        beneficio_resumo=beneficio_resumo or "Propinas integrais + subsídio",
+        descricao=descricao,
+        elegivel_angolanos=True,
+        ativa=True
+    )
+    db.session.add(nova_bolsa)
+    db.session.commit()
+
+    flash(f'Bolsa "{titulo}" cadastrada e publicada com sucesso!', "success")
+    return redirect(url_for("dashboard_admin"))
+
+
+# ROTA 13: ELIMINAR OU DESATIVAR BOLSA (Atende UC06 / RF08)
+@app.route("/admin/eliminar-bolsa/<int:bolsa_id>", methods=["POST"])
+@admin_obrigatorio
+def admin_eliminar_bolsa(bolsa_id):
+    bolsa = db.session.get(Bolsa, bolsa_id)
+    if bolsa:
+        db.session.delete(bolsa)
+        db.session.commit()
+        flash(f'Bolsa "{bolsa.titulo}" eliminada com sucesso da plataforma.', "info")
+    else:
+        flash("Bolsa não encontrada.", "danger")
+    return redirect(url_for("dashboard_admin"))
+
+
+# ==============================================================================
 # FERRAMENTA DE CONTAS (terminal): VER e ARRANJAR contas na base de dados
-# ------------------------------------------------------------------------------
-# Corra na pasta do projeto (onde está o app.py e o .env). Não arranca o site:
-#
-#   python app.py contas listar
-#       Mostra todas as contas (e-mail, nome, tipo e estado da senha). Nunca mostra senhas.
-#
-#   python app.py contas testar EMAIL SENHA
-#       Diz se o login com esse e-mail e senha funcionaria e, se não, porquê. Não altera nada.
-#
-#   python app.py contas definir EMAIL SENHA [--nome "Nome"]
-#       Cria a conta de candidato (se não existir) ou altera a senha de forma segura.
 # ==============================================================================
 AJUDA_CONTAS = """Comandos disponíveis:
   python app.py contas listar
@@ -881,7 +883,7 @@ def testar_login(email, senha):
     except (ValueError, TypeError):
         certa = False
     if not certa and not parece_hash(valor) and valor == senha:
-        certa = True  # texto simples: o login aceita e converte
+        certa = True
     if certa:
         print("ENTRARIA: conta '%s' (%s), tipo %s. Senha: %s." % (utilizador.email, utilizador.nome, utilizador.tipo, estado_da_senha(utilizador)))
     else:
@@ -897,8 +899,6 @@ def definir_conta(email, senha, nome=None):
         return
 
     utilizador = buscar_utilizador_por_email(email)
-    
-    # REGRA DE SEGURANÇA: Apenas o e-mail oficial pode deter privilégios de administrador
     tipo_atribuido = "admin" if email == EMAIL_ADMIN_OFICIAL else "candidato"
 
     if utilizador is None:
@@ -912,12 +912,11 @@ def definir_conta(email, senha, nome=None):
     else:
         if nome:
             utilizador.nome = nome
-        # Não permite que contas normais alterem o seu tipo para admin
         if utilizador.email != EMAIL_ADMIN_OFICIAL:
             utilizador.tipo = "candidato"
         acao = "ATUALIZADA"
 
-    utilizador.email = email  # guarda sempre em minúsculas e sem espaços
+    utilizador.email = email
     utilizador.definir_senha(senha)
     db.session.commit()
     print("Conta %s: %s (%s), tipo %s. Já pode entrar com esta senha." % (acao, utilizador.email, utilizador.nome, utilizador.tipo))
@@ -935,7 +934,7 @@ def valor_da_opcao(args, nome_opcao):
 def executar_comando_contas(args):
     """Lê o comando escrito no terminal (listar/testar/definir) e executa-o."""
     if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # acentos corretos no Windows
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     comando = args[0] if args else ""
     try:
         with app.app_context():
@@ -944,106 +943,21 @@ def executar_comando_contas(args):
             elif comando == "testar" and len(args) >= 3:
                 testar_login(args[1], args[2])
             elif comando == "definir" and len(args) >= 3:
-                # Blindagem: Não aceita mais o argumento --tipo. A regra é estritamente automática
                 definir_conta(args[1], args[2], valor_da_opcao(args, "--nome"))
             else:
                 print(AJUDA_CONTAS)
-    except Exception as erro:  # ex.: sem internet ou .env em falta
+    except Exception as erro:
         print("Não foi possível conectar com a base de dados: %s" % erro)
-=======
-
-    # Aplicação incremental de filtros
-    if termo_pesquisa:
-        termo = f"%{termo_pesquisa}%"
-        query = query.filter(
-            (Bolsa.titulo.ilike(termo))
-            | (Bolsa.descricao.ilike(termo))
-            | (Bolsa.entidade.ilike(termo))
-            | (Bolsa.area_estudo.ilike(termo))
-        )
-
-    if filtro_pais and filtro_pais != "Todos os Países":
-        query = query.filter(Bolsa.pais_destino.ilike(filtro_pais))
-
-    if filtro_nivel and filtro_nivel != "Todos os Níveis":
-        query = query.filter(Bolsa.nivel_estudo.ilike(filtro_nivel))
-
-    # Executa a consulta
-    bolsas_disponiveis = query.order_by(Bolsa.id.desc()).all()
-
-    # Carrega bolseiros voluntários verificados para a secção de comunidade
-    bolseiros_destaque = BolseiroVoluntario.query.filter_by(verificado=True).limit(6).all()
-
-    # Carrega o catálogo de mentorias ativas
-    mentorias_catalogo = Mentoria.query.filter_by(ativa=True).all()
-
-    return render_template(
-        "index.html",
-        bolsas=bolsas_disponiveis,
-        bolseiros=bolseiros_destaque,
-        mentorias=mentorias_catalogo,
-        termo_pesquisa=termo_pesquisa,
-        filtro_pais=filtro_pais,
-        filtro_nivel=filtro_nivel,
-    )
-
-
-# ROTA 2: API DO CHATBOT REGRA/PALAVRAS-CHAVE (Atende UC15 / RF24, RF25)
-@app.route("/api/chatbot", methods=["POST"])
-def chatbot_responder():
-    dados = request.get_json() or {}
-    mensagem = dados.get("mensagem", "").strip().lower()
-
-    if not mensagem:
-        return jsonify({"resposta": "Por favor, escreve uma pergunta para que te possa ajudar."})
-
-    # Regra 1: Dúvidas sobre bolsas integrais / 100% comparticipadas
-    if "integral" in mensagem or "100%" in mensagem or "comparticipada" in mensagem or "integrais" in mensagem:
-        total_integrais = Bolsa.query.filter_by(ativa=True, cobertura="integral").count()
-        return jsonify({
-            "resposta": f"Atualmente temos {total_integrais} bolsa(s) 100% comparticipada(s) no portal. As bolsas integrais cobrem propinas e alojamento sem custos diretos para ti."
-        })
-
-    # Regra 2: Dúvidas sobre preços ou contratação de mentorias
-    elif "mentoria" in mensagem or "preço" in mensagem or "custo" in mensagem or "valor" in mensagem:
-        mentorias = Mentoria.query.filter_by(ativa=True).all()
-        lista_mentorias = ", ".join([f"{m.titulo} ({int(m.preco_kz):,} Kz)".replace(",", ".") for m in mentorias])
-        return jsonify({
-            "resposta": f"Oferecemos mentorias pagas para apoiar a tua candidatura: {lista_mentorias}. Podes agendar na secção Mentorias."
-        })
-
-    # Regra 3: Dúvidas sobre o INAGBE ou bolsas internas em Angola
-    elif "inagbe" in mensagem or "angola" in mensagem or "interna" in mensagem:
-        total_internas = Bolsa.query.filter_by(ativa=True, tipo="interna").count()
-        return jsonify({
-            "resposta": f"Temos {total_internas} bolsa(s) internas em Angola. Podes consultar os requisitos e prazos diretamente no nosso catálogo com o filtro de país 'Angola'."
-        })
-
-    # Regra 4: Dúvidas sobre documentos ou requisitos
-    elif "documento" in mensagem or "requisito" in mensagem or "papel" in mensagem:
-        return jsonify({
-            "resposta": "Os documentos habituais incluem: Certificado de Habilitações autenticado, Cópia do BI, Carta de Motivação e Carta de Recomendação. Cada bolsa detalha os seus requisitos no respetivo cartão."
-        })
-
-    # Resposta padrão orientadora
-    return jsonify({
-        "resposta": "Sou o UniX! Podes perguntar-me sobre 'bolsas integrais', 'mentorias e preços', 'bolsas do INAGBE' ou 'documentos necessários'."
-    })
->>>>>>> origin/main
 
 
 # ==============================================================================
 # BLOCO DE EXECUÇÃO LOCAL E CRIAÇÃO DAS TABELAS
 # ==============================================================================
 if __name__ == "__main__":
-<<<<<<< HEAD
-    # Modo ferramenta de contas: "python app.py contas listar" (não arranca o site)
     if len(sys.argv) > 1 and sys.argv[1] == "contas":
         executar_comando_contas(sys.argv[2:])
         sys.exit(0)
 
-=======
->>>>>>> origin/main
     with app.app_context():
         print("A sincronizar modelos normalizados com a nuvem (Neon)...")
         db.create_all()
