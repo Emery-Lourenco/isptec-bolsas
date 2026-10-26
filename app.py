@@ -964,4 +964,4 @@ if __name__ == "__main__":
         criar_dados_iniciais()
         print("Base de dados sincronizada e povoada com sucesso!")
 
-    app.run(debug=True)
+        app.run(debug=True)

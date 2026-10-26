@@ -5,105 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal de Bolsas de Estudo & Mentorias | ISPTEC</title>
     
-    <!-- CSS do Bootstrap 5 via CDN -->
+    <!-- css do bootstrap 5 via cdn -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Ícones do Bootstrap -->
+    <!-- ícones do bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        
+        .hero-section {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 60px 0;
+        }
+    </style>
 </head>
 
 <body class="bg-secondary-subtle">
 
-    <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
+    <!-- Barra de navegação superior -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
-      <div class="container">
-        <a class="navbar-brand fw-bold text-primary" href="/">
-            <i class="bi bi-mortarboard-fill me-2"></i>Uni<span class="text-white">BoLSas</span>
-        </a>
+        <div class="container">
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/"><i class="bi bi-house-door me-1"></i>Início</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#como_funciona"><i class="bi bi-info-circle me-1"></i>Como Funciona</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#bolsa"><i class="bi bi-search me-1"></i>Bolsas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#comunidade"><i class="bi bi-people me-1"></i>Mentores & Bolseiros</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#mentorias"><i class="bi bi-person-badge me-1"></i>Mentorias</a>
-                </li>
-
-                <!-- VERIFICAÇÃO DE SESSÃO DINÂMICA -->
-                {% if session.get('utilizador_id') %}
-                    {% if session.get('utilizador_tipo') == 'admin' %}
-                        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                            <a class="btn btn-success px-4 rounded-pill d-flex align-items-center gap-1" href="/admin">
-                                <i class="bi bi-shield-lock me-1"></i>Painel Admin
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                            <a class="btn btn-primary px-4 rounded-pill d-flex align-items-center gap-1" href="/dashboard">
-                                <i class="bi bi-speedometer2 me-1"></i>Meu Painel
-                            </a>
-                        </li>
-                    {% endif %}
-                {% else %}
+            <a class="navbar-brand fw-bold text-primary" href="#">
+                <i class="bi bi-mortarboard-fill me-2"></i>Uni<span class="text-white">BoLSas</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="bi bi-house-door me-1"></i>Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#como_funciona"><i class="bi bi-info-circle me-1"></i>Como Funciona</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#bolsa"><i class="bi bi-search me-1"></i>Bolsas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#comunidade"><i class="bi bi-people me-1"></i>Mentores & Bolseiros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#mentorias"><i class="bi bi-person-badge me-1"></i>Mentorias</a>
+                    </li>
                     <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                        <a class="btn btn-outline-light px-4 rounded-pill" href="/login">
+                        <a class="btn btn-outline-light px-4 rounded-pill" href="login.html">
                             <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
                         </a>
+
                     </li>
-                {% endif %}
-            </ul>
+                </ul>
+
+            </div>
         </div>
-      </div>
     </nav>
 
-    <!-- Cabeçalho Hero -->
+               <!--Cabeçalho-->
     <div class="container my-4">
         <div class="p-5 mb-4 bg-light rounded-4 shadow-sm text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
             <h1 class="display-5 fw-bold text-dark">Encontre a sua Oportunidade Académica</h1>
             <p class="col-md-8 mx-auto text-muted fs-5">
               Agregador de bolsas de estudo nacionais e internacionais com acompanhamento personalizado por mentores e bolseiros.
             </p>
-            <div class="d-flex justify-content-center gap-3 mt-3">
-                <a href="#bolsa" class="btn btn-primary rounded-pill px-4">Explorar Bolsas</a>
-                <a href="#comunidade" class="btn btn-outline-secondary rounded-pill px-4">Conhecer Mentores</a>
+
+    <div class="d-flex justify-content-center gap-3 mt-3">
+                <button onclick="location.href='#bolsa'" type="button" class="btn btn-outline-primary rounded-pill px-4">Explorar Bolsas</button>
+                <button onclick="location.href='#comunidade'" type="button" class="btn btn-outline-secondary rounded-pill px-4">Conhecer Mentores</button>
             </div>
-        </div>
+
+
+           </div>
     </div>
 
-    <!-- Barra de filtros pra pesquisa (Conectada ao Backend Flask via GET) -->
-    <section class="container my-5">
+                       <!-- 
+    
+                       barra de filtros pra pesquisa -->
+         <section class="container my-5">
+
+
         <div style="margin-top: -19px; position: relative; z-index: 10;" class="card shadow-sm border-0 p-4 rounded-3 bg-white">
             <h4 class="mb-3 text-dark fw-bold"><i class="bi bi-funnel-fill me-2 text-primary"></i>Filtrar Bolsas de Estudo</h4>
-            
+           
             <form class="row g-3" action="/" method="GET">
                 <div class="col-md-5">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" name="pesquisa" class="form-control" value="{{ termo_pesquisa or '' }}" placeholder="Pesquisar por curso, universidade, título...">
-                    </div>
-                </div>
 
-                <div class="col-md-3">
-                    <select name="pais" class="form-select">
-                        <option value="Todos os Países" {% if filtro_pais == 'Todos os Países' or not filtro_pais %}selected{% endif %}>Todos os Países</option>
-                        <option value="Angola" {% if filtro_pais == 'Angola' %}selected{% endif %}>Angola</option>
-                        <option value="Portugal" {% if filtro_pais == 'Portugal' %}selected{% endif %}>Portugal</option>
-                        <option value="Reino Unido" {% if filtro_pais == 'Reino Unido' %}selected{% endif %}>Reino Unido</option>
-                        <option value="Hungria" {% if filtro_pais == 'Hungria' %}selected{% endif %}>Hungria</option>
+                    <div class="input-group">
+
+                        <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" name="pesquisa" class="form-control" value="{{ termo_pesquisa }}" placeholder="pesquisar por curso, universidade...">
+                    </div>
+            </div>
+
+                    <div class="col-md-3">
+
+                         <select name="pais" class="form-select">
+
+                               <option value="Todos os Países" {% if filtro_pais == 'Todos os Países' or not filtro_pais %}selected{% endif %}>Todos os Países</option>
+               
+                            
+
+             <option value="Angola" {% if filtro_pais == 'Angola' %}selected{% endif %}>Angola</option>
+                    <option value="Portugal" {% if filtro_pais == 'Portugal' %}selected{% endif %}>Portugal</option>
                         <option value="Brasil" {% if filtro_pais == 'Brasil' %}selected{% endif %}>Brasil</option>
+                        <option value="Rússia" {% if filtro_pais == 'Rússia' %}selected{% endif %}>Rússia</option>
+                    
                     </select>
                 </div>
 
@@ -113,7 +119,8 @@
                         <option value="Licenciatura" {% if filtro_nivel == 'Licenciatura' %}selected{% endif %}>Licenciatura</option>
                         <option value="Mestrado" {% if filtro_nivel == 'Mestrado' %}selected{% endif %}>Mestrado</option>
                         <option value="Doutoramento" {% if filtro_nivel == 'Doutoramento' %}selected{% endif %}>Doutoramento</option>
-                    </select>
+                    
+                </select>
                 </div>
 
                 <div class="col-md-1">
@@ -123,45 +130,102 @@
         </div>
     </section>
 
-    <!-- SECÇÃO SOBRE NÓS E IMPACTO -->
+       <!-- Secção sobre nós     -->
+
     <section class="container my-5" id="sobre">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0">Sobre nós</h3>
-        </div>
+
+           </div>
         <div class="card bg-white border-0 shadow-sm rounded-4 p-4">
             <div class="row align-items-center">
                 <div class="col-md-7">
-                    <h4 class="fw-bold text-dark mb-3">A tua ponte para o sucesso académico internacional</h4>
-                    <p class="text-muted">
+                <h4 class="fw-bold text-dark mb-3">A tua ponte para o sucesso académico internacional</h4>
+                <p class="text-muted">
                         O <strong>UniBoLSas</strong> foi desenvolvido para centralizar oportunidades de bolsas de estudo para estudantes angolanos, conectando candidatos directamente a mentores qualificados e a bolseiros que já vivenciam o processo no estrangeiro.
+                   
                     </p>
-                </div>
+                 </div>
+                 
                 <div class="col-md-5">
                     <div class="row text-center g-3">
+
                         <div class="col-6">
+
                             <div class="p-3 bg-light rounded-3 border">
-                                <h3 class="fw-bold text-primary mb-0">+{{ bolsas|length }}</h3>
+                                         <h3 class="fw-bold text-primary mb-0">+{{ bolsas|length }}</h3>
                                 <small class="text-muted">Bolsas Activas</small>
                             </div>
                         </div>
+
                         <div class="col-6">
                             <div class="p-3 bg-light rounded-3 border">
                                 <h3 class="fw-bold text-success mb-0">+200</h3>
-                                <small class="text-muted">Estudantes Apoiados</small>
+                                   <small class="text-muted">Estudantes Apoiados</small>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECÇÃO COMO FUNCIONA -->
+<!--     Secção missão visão e valores da comunidade-->
+
+    <section class="container my-5">
+        <div style="margin-top: -19px;" class="card bg-white shadow-sm rounded-4 p-4">
+            <div class="text-center mb-4">
+                <h4 class="fw-bold text-dark mb-1">O Que Nos Move</h4>
+                <p class="text-muted small m-0">Os pilares fundamentais que guiam a nossa comunidade e mentoria</p>
+            </div>
+            <div class="row g-4 text-center">
+                <div class="col-md-4">
+                    <div class="p-3 h-100 rounded-3 bg-light border-0">
+                        <div class="mb-3">
+                            <span class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle" style="width: 50px; height: 50px;">
+                                <i class="bi bi-star-fill fs-4"></i>
+                            </span>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Nossa Missão</h5>
+                        <p class="text-muted small mb-0">Democratizar o acesso à informação sobre bolsas de estudo e capacitar estudantes com a mentoria necessária.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 h-100 rounded-3 bg-light border-0">
+                        <div class="mb-3">
+                            <span class="d-inline-flex align-items-center justify-content-center bg-success text-white rounded-circle" style="width: 50px; height: 50px;">
+                                <i class="bi bi-eye-fill fs-4"></i>
+                            </span>
+                        </div>
+
+                        <h5 class="fw-bold text-dark mb-2">Nossa Visão</h5>
+                        <p class="text-muted small mb-0">Ser a maior rede de apoio, partilha e mentoria para estudantes e futuros bolseiros em Angola e no exterior.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+
+
+                    <div class="p-3 h-100 rounded-3 bg-light border-0">
+                        <div class="mb-3">
+                            <span class="d-inline-flex align-items-center justify-content-center bg-warning text-dark rounded-circle" style="width: 50px; height: 50px;">
+                                <i class="bi bi-heart-fill fs-4"></i>
+                            </span>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Nossos Valores</h5>
+                        <p class="text-muted small mb-0">Transparência no acesso a oportunidades, entreajuda comunitária, rigor na documentação e compromisso.</p>
+                    </div>
+                    </div>
+
+            </div>
+        </div>
+    </section>
+
+            <!-- secção como funciona -->
     <section class="container my-5" id="como_funciona">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0">Como Funciona</h3>
         </div>
-
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
@@ -170,7 +234,6 @@
                     <p class="text-muted small mb-0">Explore e filtre as melhores oportunidades de bolsas nacionais e internacionais ajustadas ao teu perfil.</p>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
                     <div class="fs-1 text-primary mb-3"><i class="bi bi-person-check"></i></div>
@@ -178,101 +241,114 @@
                     <p class="text-muted small mb-0">Solicite uma sessão de mentoria com mentores e especialistas para preparar a tua candidatura.</p>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
                     <div class="fs-1 text-primary mb-3"><i class="bi bi-send-check"></i></div>
                     <h5 class="fw-bold text-dark">3. Submeta a Candidatura</h5>
-                    <p class="text-muted small mb-0">Envie a tua candidatura com confiança diretamente no portal oficial indicado.</p>
+                    <p class="text-muted small mb-0">Envie a tua candidatura com confiança e acompanha todo o processo directamente na plataforma.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Catalogo de bolsas disponiveis (Lendo do PostgreSQL via Jinja2) -->
+    <!--  CAtalogo de bolsas disponiveis -->
     <main class="container my-5" id="bolsa">
-        <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
+        <!-- título com o botão ver todas -->
+        <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between align-items-center border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0">Bolsas em Destaque</h3>
-            <span class="text-dark fw-bold small align-self-center">{{ bolsas|length }} bolsas encontradas</span>
+            <a href="#" class="btn btn-dark btn-sm rounded-pill px-3">
+                Ver Todas <i class="bi bi-arrow-right ms-1"></i>
+            </a>
         </div>
 
-        <!-- Contentor com Scroll Horizontal -->
+<!-- Contentor com scroll-->
         <div class="d-flex flex-row overflow-x-auto gap-4 pb-3 px-1" style="scroll-snap-type: x mandatory; scrollbar-width: thin;">
 
-            {% for bolsa in bolsas %}
-            <div style="min-width: 350px; max-width: 380px; flex: 0 0 auto; scroll-snap-align: start;">
-                <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white">
-                    
-                    <!-- Area de formação e Estado -->
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6">
-                            {{ bolsa.area_estudo or 'Geral' }}
-                        </span>
-                        {% if bolsa.cobertura == 'integral' %}
-                            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
-                                <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> 100% Integral
-                            </span>
-                        {% else %}
-                            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3 py-2 d-inline-flex align-items-center">
-                                <span class="p-1 bg-warning rounded-circle me-1 d-inline-block"></span> Parcial
-                            </span>
-                        {% endif %}
-                    </div>
-
-                    <!-- Título da Bolsa -->
-                    <h5 class="card-title fw-bold text-dark fs-5 mb-2">
-                        {{ bolsa.titulo }}
-                    </h5>
-
-                    <!-- Descrição da bolsa -->
-                    <p class="card-text text-muted small mb-3">
-                        {{ bolsa.descricao[:120] }}{% if bolsa.descricao|length > 120 %}...{% endif %}
-                    </p>
-
-                    <!-- Detalhes com Ícones -->
-                    <ul class="list-unstyled text-secondary small my-3">
-                        <li class="mb-2 d-flex align-items-center">
-                            <i class="bi bi-building me-2 fs-6 text-muted"></i>
-                            <span>{{ bolsa.entidade }}</span>
-                        </li>
-                        <li class="mb-2 d-flex align-items-center">
-                            <i class="bi bi-geo-alt me-2 fs-6 text-muted"></i>
-                            <span>{{ bolsa.pais_destino }} ({{ bolsa.tipo|capitalize }})</span>
-                        </li>
-                        <li class="mb-2 d-flex align-items-center">
-                            <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
-                            <span>{{ bolsa.nivel_estudo or 'Licenciatura' }}</span>
-                        </li>
-                        <li class="mb-2 d-flex align-items-center">
-                            <i class="bi bi-calendar-event me-2 fs-6 text-muted"></i>
-                            <span>Prazo: {% if bolsa.data_limite %}{{ bolsa.data_limite.strftime('%d/%m/%Y') }}{% else %}Aberto{% endif %}</span>
-                        </li>
-                    </ul>
-
-                    <!-- Benefícios da bolsa -->
-                    <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">
-                                BENEFÍCIO
-                            </span>
-                            <span class="fw-semibold text-dark small">
-                                {{ bolsa.beneficio_resumo or 'Propinas integrais + subsídio' }}
-                            </span>
-                        </div>
-                        
-                        <!-- Botão que abre a página oficial externa num novo separador (UC05 / RF07) -->
-                        <a href="{{ bolsa.link_oficial }}" target="_blank" rel="noopener noreferrer" title="Candidatar no site oficial" class="btn btn-outline-primary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                    </div>
-
+                  {% for bolsa in bolsas %}
+            
+                  <div style="min-width: 350px; max-width: 380px; flex: 0 0 auto; scroll-snap-align: start;">
+              <div class="card h-100 border-light shadow-sm rounded-4 p-3 bg-white">
+                
+                <!-- area de formação -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge bg-light text-secondary rounded-pill px-3 py-2 fw-normal fs-6">
+                    {{ bolsa.area_estudo or 'Geral' }}
+                  </span>
+                  {% if bolsa.cobertura == 'integral' %}
+                      <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 d-inline-flex align-items-center">
+                        <span class="p-1 bg-success rounded-circle me-1 d-inline-block"></span> 100% Integral
+                      </span>
+                  {% else %}
+                      <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3 py-2 d-inline-flex align-items-center">
+                        <span class="p-1 bg-warning rounded-circle me-1 d-inline-block"></span> Parcial
+                      </span>
+                  {% endif %}
                 </div>
+
+                        <!-- título da bolsa -->
+                <h5 class="card-title fw-bold text-dark fs-5 mb-2">
+                  {{ bolsa.titulo }}
+                </h5>
+
+         <!-- Dscrição da bolsa -->
+                <p class="card-text text-muted small mb-3">
+
+                  {{ bolsa.descricao }}
+                </p>
+
+                <!-- Detalhes com ícones -->
+                <ul class="list-unstyled text-secondary small my-3">
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-building me-2 fs-6 text-muted"></i>
+                    <span>{{ bolsa.entidade }}</span>
+                  </li>
+                    <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-geo-alt me-2 fs-6 text-muted"></i>
+                    <span>{{ bolsa.pais_destino }}</span>
+                   </li>
+
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-mortarboard me-2 fs-6 text-muted"></i>
+                    <span>{{ bolsa.nivel_estudo or 'Ensino Superior' }}</span>
+                  </li>
+                  <li class="mb-2 d-flex align-items-center">
+                    <i class="bi bi-calendar-event me-2 fs-6 text-muted"></i>
+                    <span>Prazo: {% if bolsa.data_limite %}{{ bolsa.data_limite.strftime('%d/%m/%Y') }}{% else %}Aberto{% endif %}</span>
+                  </li>
+                </ul>
+
+                <!--Benefícios da bolsa -->
+                 
+                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                  <div>
+
+                    <span class="text-uppercase text-muted extra-small d-block fw-bold" style="font-size: 0.75rem;">
+                      BENEFÍCIO
+                    </span>
+                    <span class="fw-semibold text-dark small">
+                      {{ bolsa.beneficio_resumo or 'Consulte o regulamento' }}
+                    </span>
+                  </div>
+
+
+                  
+    <!-- botão para detalhes -->
+
+                  <a href="{{ bolsa.link_oficial }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-arrow-up-right"></i>
+                  </a>
+                </div>
+
+            </div>
+            {% endfor %}
+
             </div>
             {% else %}
             <div class="col-12 py-4">
                 <div class="alert alert-light text-center border-0 shadow-sm rounded-4">
                     <i class="bi bi-search fs-2 text-muted mb-2 d-block"></i>
-                    Nenhuma bolsa encontrada para os critérios selecionados. Experimenta limpar os filtros de pesquisa!
+
+                    Nenhuma bolsa encontrada para os critérios selecionados.
                 </div>
             </div>
             {% endfor %}
@@ -280,36 +356,85 @@
         </div>
     </main>
 
-    <!-- SECÇÃO MENTORES E BOLSEIROS (Lendo os perfis verificados do PostgreSQL) -->
+ <!-- Secção mentores e bolseiros-->
     <section class="container my-5" id="comunidade">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
             <h3 class="fw-bold text-dark m-0">Mentores & Bolseiros em Destaque</h3>
         </div>
 
-        <div class="row g-4">
-            {% for b in bolseiros %}
-            <div class="col-md-4">
+        <div class="d-flex flex-row overflow-x-auto gap-4 pb-3 px-1" style="scroll-snap-type: x mandatory; scrollbar-width: thin;">
+
+            <!-- Mentor 1 -->
+            <div style="min-width: 320px; max-width: 350px; flex: 0 0 auto; scroll-snap-align: start;">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-person-circle fs-1 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">Eng. Emerson Lourenço</h5>
+                    <span class="badge bg-primary-subtle text-primary rounded-pill mb-3">Mentor Técnico</span>
+                    <p class="text-muted small">Especialista em preparação de cartas de motivação e candidaturas para Bolsas em Engenharia.</p>
+                </div>
+
+            </div>
+
+    <!-- Bolseiro 1 -->
+            <div style="min-width: 320px; max-width: 350px; flex: 0 0 auto; scroll-snap-align: start;">
+                
                 <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
                     <div class="mb-3">
                         <i class="bi bi-mortarboard-fill fs-1 text-success"></i>
                     </div>
-                    <h5 class="fw-bold text-dark mb-1">{{ b.nome }}</h5>
-                    <span class="badge bg-success-subtle text-success rounded-pill mb-2">
-                        <i class="bi bi-patch-check-fill me-1"></i>Verificado
-                    </span>
-                    <p class="text-muted small fw-semibold mb-1">{{ b.curso }} - {{ b.universidade }}</p>
-                    <p class="text-muted small mb-0">{{ b.relato }}</p>
+                    <h5 class="fw-bold text-dark mb-1">Domingas Neto</h5>
+                    <span class="badge bg-success-subtle text-success rounded-pill mb-3">Bolseira em Portugal</span>
+                    <p class="text-muted small">Aluna de Mestrado na Universidade de Lisboa. Partilha a sua experiência real e dicas de adaptação.</p>
                 </div>
             </div>
-            {% endfor %}
+
+            <!-- Mentor 2 -->
+            <div style="min-width: 320px; max-width: 350px; flex: 0 0 auto; scroll-snap-align: start;">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-person-circle fs-1 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">Dr. Josenilson Luciano</h5>
+                    <span class="badge bg-primary-subtle text-primary rounded-pill mb-3">Mentor de Documentação</span>
+                    <p class="text-muted small">Apoio na revisão de equivalências e preparação para entrevistas de seleção.</p>
+                </div>
+            </div>
+
+            <!-- Bolseiro 2 -->
+            <div style="min-width: 320px; max-width: 350px; flex: 0 0 auto; scroll-snap-align: start;">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-mortarboard-fill fs-1 text-success"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">Carlos Alberto</h5>
+                    <span class="badge bg-success-subtle text-success rounded-pill mb-3">Bolseiro no Brasil</span>
+                    <p class="text-muted small">Estudante de Licenciatura em São Paulo. Disponível para partilhar dicas sobre vistos e alojamento.</p>
+                </div>
+            </div>
+
         </div>
     </section>
 
-    <!-- SECÇÃO DE MENTORIAS (Catálogo lido da base de dados) -->
+    <!-- SEcção de mentorias -->
     <section class="container my-5" id="mentorias">
         <div style="margin-top: -20px; background: #9299a0;" class="d-flex justify-content-between border-4 p-2 rounded-3 mb-4">
-            <h3 class="fw-bold text-dark m-0">Catálogo de Mentorias Pagas</h3>
+            <h3 class="fw-bold text-dark m-0">Mentorias</h3>
         </div>
+
+        <div class="card bg-white border-0 shadow-sm rounded-4 p-5 text-center">
+            <h3 class="fw-bold mb-3 text-dark">Precisa de Ajuda para a sua Candidatura?</h3>
+            <p class="text-muted mb-4 mx-auto" style="max-width: 600px;">Agende uma sessão de mentoria individual com especialistas para rever a sua carta de motivação e preparar os seus documentos.</p>
+            <div>
+                <a href="/login" class="btn btn-success btn-lg px-4 rounded-pill shadow-sm">
+                    <i class="bi bi-calendar-check me-2"></i>Agendar Mentoria
+                </a>
+            </div>
+        </div>
+    </section>
+
+          <!-- rodapé -->
 
         <div class="row g-4">
             {% for m in mentorias %}
@@ -345,7 +470,9 @@
     <footer class="bg-dark text-white pt-5 pb-4 mt-5">
         <div class="container">
             <div class="row g-4">
-                <div class="col-md-4">
+
+         <div class="col-md-4">
+
                     <h5 class="fw-bold text-primary mb-3">
                         <i class="bi bi-mortarboard-fill me-2"></i>Uni<span class="text-white">BoLSas</span>
                     </h5>
@@ -353,7 +480,6 @@
                         Plataforma agregadora de bolsas de estudo para estudantes angolanos. Promovemos a igualdade de oportunidades no acesso ao ensino superior.
                     </p>
                 </div>
-
                 <div class="col-md-4">
                     <h6 class="fw-bold mb-3 text-white">Links Rápidos</h6>
                     <ul class="list-unstyled text-secondary small">
@@ -376,44 +502,44 @@
         </div>
     </footer>
 
-    <!-- Botão para o Chatbot -->
+    <!-- botão para o chatbot -->
     <div class="position-fixed bottom-0 end-0 p-4" style="z-index: 1050;">
         <button data-bs-toggle="collapse" data-bs-target="#chatbotCollapse" type="button" class="btn btn-dark rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
             <i class="bi bi-chat-dots-fill fs-4 text-white"></i>
         </button>
     </div>
 
-    <!-- Codigo do Chatbot Interativo -->
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050; width: 320px;">
+    <!-- codigo do chatbot -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050; width: 300px;">
         <div class="collapse mb-2" id="chatbotCollapse">
             <div class="card chatbot-card shadow-lg border-0 rounded-3">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="mb-0 fw-bold">UniX - Assistente de Bolsas</h6>
-                        <small class="text-light" style="font-size: 0.75rem;">Online</small>
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h6 class="mb-0 fw-bold">UniX - Assistente de Bolsas</h6>
+                            <small class="text-light" style="font-size: 0.75rem;">Online</small>
+                        </div>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-toggle="collapse" data-bs-target="#chatbotCollapse"></button>
                 </div>
-
                 <div class="card-body overflow-auto bg-light" style="height: 280px;" id="chatMessages">
                     <div class="p-2 bg-white rounded shadow-sm mb-2 text-dark fs-7">
                         Olá! Sou o UniX, o teu assistente virtual. Como posso ajudar-te a encontrar uma bolsa hoje?
                     </div>
                 </div>
-
                 <div class="card-footer bg-white border-0">
                     <form id="chatForm" class="input-group">
-                        <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Escreva a sua dúvida..." required autocomplete="off">
+                        <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="escreva a sua dúvida..." required autocomplete="off">
                         <button class="btn btn-primary btn-sm" type="submit"><i class="bi bi-send-fill"></i></button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
+        
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script de Comunicação do Chatbot com o Flask via JSON -->
+    <!-- script pra ligar o chatbot ao app.py -->
     <script>
         document.getElementById('chatForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -448,11 +574,10 @@
             } catch (err) {
                 const errMsg = document.createElement('div');
                 errMsg.className = 'p-2 bg-danger-subtle text-danger rounded shadow-sm mb-2 fs-7';
-                errMsg.textContent = 'Erro de comunicação com o assistente virtual.';
+                errMsg.textContent = 'Erro de ligação ao assistente virtual.';
                 chatMessages.appendChild(errMsg);
             }
         });
     </script>
-
 </body>
 </html>

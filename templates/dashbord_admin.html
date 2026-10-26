@@ -85,7 +85,7 @@
 
 <body class="bg-secondary-subtle">
 
-    <!-- 1. BARRA DE NAVEGAÇÃO -->
+          <!--Barra de navegaçao -->
     <nav class="navbar navbar-dark bg-dark sticky-top shadow px-2 px-md-4">
         <div class="container-fluid d-flex align-items-center justify-content-between">
             
@@ -100,10 +100,11 @@
             </div>
 
             <div class="d-flex align-items-center gap-3">
+
                 <!-- Perfil do Administrador -->
                 <div class="dropdown">
                     <a class="btn btn-outline-light rounded-pill dropdown-toggle d-flex align-items-center gap-2 px-2 px-md-3 py-1" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle fs-5 text-primary"></i>
+                        <i class="bi bi-person-circle fs-5 "></i>
                         <span class="d-none d-sm-inline">Admin</span>
                     </a>
 
@@ -118,7 +119,8 @@
         </div>
     </nav>
 
-    <!-- ESTRUTURA PRINCIPAL -->
+    <!-- estrutura principal -->
+
     <div class="d-flex">
 
         <!-- Sidebar -->
@@ -172,7 +174,7 @@
                     <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-speedometer2 me-2"></i>Painel Administrativo</h3>
                 </div>
 
-                <!-- 4 CARTÕES DE ESTATÍSTICAS REAIS -->
+                <!-- CARTÕES DE ESTATÍSTICAS  -->
                 <div class="row g-3 mb-4">
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
@@ -271,8 +273,30 @@
                     </button>
                 </div>
 
-                <!-- Tabela de Bolsas Dinâmica -->
+                <!-- Barra de Pesquisa e Filtros -->
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control bg-light border-start-0" placeholder="Pesquisar por título, entidade ou país...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select bg-light">
+                                <option value="" selected>Filtrar por nível...</option>
+                                <option value="Licenciatura">Licenciatura</option>
+                                <option value="Mestrado">Mestrado</option>
+                                <option value="Doutoramento">Doutoramento</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Tabela de Bolsas  -->
                 <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-4">
+                    
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
@@ -311,6 +335,19 @@
                             </tbody>
                         </table>
                     </div>
+                     <!-- Paginação -->
+
+
+                    <nav class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top flex-wrap gap-2">
+                        <span class="text-muted small">A mostrar 2 de 12 registos</span>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Seguinte</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
 
@@ -346,7 +383,7 @@
                 </div>
             </div>
 
-            <!-- SECÇÃO BOLSEIROS -->
+    <!-- SECÇÃO bolseiros -->
             <div id="section-bolseiros" class="admin-section">
                 <div style="background: #9299a0;" class="p-3 rounded-3 mb-4 shadow-sm">
                     <h3 class="fw-bold text-dark m-0 fs-4"><i class="bi bi-people-fill me-2"></i>Bolseiros Voluntários Verificados</h3>
@@ -382,7 +419,9 @@
         </main>
     </div>
 
-    <!-- MODAL PARA CADASTRAR NOVA BOLSA (Conectado via POST a /admin/cadastrar-bolsa) -->
+             <!-- MODAL PARA CADASTRAR NOVA BOLSA -->
+
+             
     <div class="modal fade" id="modalCadastrarBolsa" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 rounded-4 shadow">
@@ -455,7 +494,7 @@
 
                         <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
                             <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">Guardar Bolsa</button>
+                            <button type="submit" class="btn btn-outline-success rounded-pill px-4 fw-bold">Guardar Bolsa</button>
                         </div>
                     </form>
                 </div>
