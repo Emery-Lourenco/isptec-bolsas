@@ -1,0 +1,52 @@
+@startuml
+left to right direction
+actor Visitante
+actor Candidato
+actor Administrador
+actor Chatbot
+
+Candidato --|> Visitante
+
+rectangle "MVP - Plataforma de Bolsas para Angolanos" {
+  usecase "UC01 Registar-se" as UC01
+  usecase "UC02 Autenticar-se" as UC02
+  usecase "UC03 Pesquisar e filtrar bolsas" as UC03
+  usecase "UC04 Ver detalhes da bolsa" as UC04
+  usecase "UC05 Candidatar-se a bolsa" as UC05
+  usecase "UC06 Gerir bolsas" as UC06
+  usecase "UC07 Explorar comunidade de bolseiros" as UC07
+  usecase "UC08 Pedir contacto com um bolseiro" as UC08
+  usecase "UC09 Gerir bolseiros voluntários" as UC09
+  usecase "UC10 Tratar pedidos de contacto" as UC10
+  usecase "UC11 Consultar catálogo de mentorias" as UC11
+  usecase "UC12 Contratar mentoria (pagamento simulado)" as UC12
+  usecase "UC13 Gerir catálogo de mentorias" as UC13
+  usecase "UC14 Consultar mentorias contratadas" as UC14
+  usecase "UC15 Conversar com o chatbot" as UC15
+}
+
+Visitante --> UC01
+Visitante --> UC03
+Visitante --> UC04
+Visitante --> UC07
+Visitante --> UC11
+Visitante --> UC15
+Chatbot --> UC15
+Candidato --> UC02
+Candidato --> UC05
+Candidato --> UC08
+Candidato --> UC12
+Candidato --> UC14
+Administrador --> UC02
+Administrador --> UC06
+Administrador --> UC09
+Administrador --> UC10
+Administrador --> UC13
+Administrador --> UC14
+
+UC05 .> UC02 : <<include>>
+UC05 .> UC04 : <<include>>
+UC08 .> UC02 : <<include>>
+UC12 .> UC02 : <<include>>
+UC14 .> UC02 : <<include>>
+@enduml

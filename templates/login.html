@@ -11,85 +11,86 @@
 
 <body class="bg-secondary-subtle d-flex flex-column min-vh-100">
 
-    <!-- Barra de navegação  -->
+    <!-- Barra de navegação -->
     <nav class="navbar navbar-dark bg-dark shadow">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="index.html">
+            <a class="navbar-brand fw-bold text-primary" href="/">
                 <i class="bi bi-mortarboard-fill me-2"></i>Uni<span class="text-white">BoLSas</span>
             </a>
-            <a href="index.html" class="btn btn-outline-light btn-sm rounded-pill">
+            <a href="/" class="btn btn-outline-light btn-sm rounded-pill">
                 <i class="bi bi-arrow-left me-1"></i>Voltar ao Início
             </a>
         </div>
     </nav>
 
-    <!-- autenticação -->
+    <!-- Autenticação -->
     <main class="container my-auto py-5">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">
                 
                 <div class="card bg-white border-0 shadow-sm rounded-4 p-4">
                     
-                    <!-- Cabeçalho  -->
+                    <!-- Cabeçalho -->
                     <div class="text-center mb-4">
                         <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle mb-3" style="width: 60px; height: 60px;">
                             <i class="bi bi-person-fill fs-2"></i>
                         </div>
                         <h4 class="fw-bold text-dark">Acede à tua Conta</h4>
-                       
+                        <p class="text-muted small">Introduz as tuas credenciais para acederes à tua área reservada.</p>
                     </div>
 
-                 
-                    
+                    <!-- Mensagens Flash de Alerta do Backend Flask -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show rounded-3 small py-2" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
 
                     <div class="tab-content" id="authTabContent">
                         
-                        <!-- Painel de Login -->
+                        <!-- Painel de Login conectado ao Backend Flask (POST /login) -->
                         <div class="tab-pane fade show active" id="login-panel" role="tabpanel">
-                            <form action="/dashboard.html">
+                            <form action="/login" method="POST">
                                 <div class="mb-3">
                                     <label class="form-label text-dark small fw-bold">Email Institucional ou Pessoal</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light"><i class="bi bi-envelope text-muted"></i></span>
-                                        <input type="email" class="form-control" placeholder="fulano@gmail.com" required>
+                                        <input type="email" name="email" class="form-control" placeholder="fulano@gmail.com" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <label class="form-label text-dark small fw-bold m-0">Palavra-passe</label>
-                                                                            </div>
+                                    </div>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light"><i class="bi bi-lock text-muted"></i></span>
-                                        <input type="password" class="form-control" placeholder="••••••••" required>
+                                        <input type="password" name="senha" class="form-control" placeholder="••••••••" required>
                                     </div>
                                 </div>
-                                <div class=" mb-3">
-                                    <input class="form-check-input" type="checkbox" id="rememberMe">
-                                     <label  class="form-check-label small text-muted" >   Manter sessão iniciada
-                                        <a style=" margin-left: 70px;" href="#" class=" text-decoration-none">Esqueceu a palavra-passe?</a>
-                                     
-                                    </label>
+                                <div class="mb-3 d-flex justify-content-between align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                                        <label class="form-check-label small text-muted" for="rememberMe">
+                                            Manter sessão
+                                        </label>
+                                    </div>
+                                    <a href="#" class="small text-decoration-none" onclick="alert('Funcionalidade disponível na Versão 2 conforme requisitos (RF03). Para suporte contacte suporte@unibolsas.ao');">Esqueceu a palavra-passe?</a>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">
                                     Iniciar Sessão <i class="bi bi-box-arrow-in-right ms-1"></i>
                                 </button>
                               
-                                <div style=" margin-top: 20px;">
-                                     
-                                     <label style="margin-left: 75px;" class="form-check-label small text-muted" >   Não tem uma conta?
-                                        <a style=" margin-left: 6px;" href="criar_conta.html" class=" text-decoration-none">Criar uma Conta</a>
-                                     
-                                    </label>
-                                        
-                                    
-                                     
-                                     
+                                <div class="text-center mt-4">
+                                    <span class="small text-muted">Não tem uma conta?</span>
+                                    <a href="/criar-conta" class="small text-primary text-decoration-none fw-bold ms-1">Criar uma Conta</a>
                                 </div>
-
                             </form>
                         </div>
-
-                        
 
                     </div>
 
